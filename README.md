@@ -13,7 +13,7 @@ This template includes all the configurations for kick-starting a project with R
 - [Changelog Generation](#changelog-generation)
 - [More Information](#more-information)
 
-## Installation
+## Setup
 
 For now, you need to manually copy-paste all the files from the template into your directory. Eventually, there will be a command-line tool that does this for you. After you copied all the files in this template, you will need to take the following steps:
 
