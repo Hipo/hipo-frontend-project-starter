@@ -1,0 +1,11 @@
+{
+  "common": {
+    "region": "us-east-1"
+  },
+  "staging": {
+    "bucket": "manufacturit-frontend-staging"
+  },
+  "production": {
+    "bucket": "manufacturit-frontend"
+  }
+}

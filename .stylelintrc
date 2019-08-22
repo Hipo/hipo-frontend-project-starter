@@ -1,0 +1,33 @@
+{
+  "extends": ["@hipo/stylelint-config-base"],
+  "plugins": [
+    "stylelint-order",
+    "stylelint-scss",
+    "stylelint-no-unsupported-browser-features"
+  ],
+  "rules": {
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": [
+          "range-track",
+          "range-thumb"
+        ]
+      }
+    ],
+    "order/order": [
+      [
+        "dollar-variables",
+        "at-rules",
+        {
+          "type": "at-rule",
+          "name": "include",
+          "hasBlock": false
+        },
+        "custom-properties",
+        "declarations",
+        "rules"
+      ]
+    ],
+  }
+}
