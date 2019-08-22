@@ -1,0 +1,11 @@
+{
+  "local": {
+    "BASE_URL": "http://localhost:8000/api"
+  },
+  "staging": {
+    "BASE_URL": "https://staging.manufactur-it.com/api"
+  },
+  "production": {
+    "BASE_URL": "https://manufactur-it.com/api"
+  }
+}

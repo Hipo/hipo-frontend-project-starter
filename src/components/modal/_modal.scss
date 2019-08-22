@@ -1,0 +1,41 @@
+@import "../../core/ui/style/reference/color";
+@import "../../core/ui/style/reference/measure";
+
+$modal-transition-duration: 0.2s;
+
+.ReactModal__Overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background-color: rgba($charcoal, 0.6);
+  opacity: 0;
+
+  transition: opacity $modal-transition-duration ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content {
+  position: relative;
+  top: 50%;
+  left: 50%;
+
+  width: 75vw;
+  max-height: 85vh;
+
+  overflow: auto;
+
+  background-color: $bg-color;
+  border-radius: $small-border-radius;
+
+  transform: translate(-50%, -50%);
+}

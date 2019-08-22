@@ -1,0 +1,14 @@
+{
+  "local": {
+    "staticPath": "",
+    "staticHost": "/"
+  },
+  "production": {
+    "staticPath": "",
+    "staticHost": "https://s3.us-east-1.amazonaws.com/manufacturit-frontend/"
+  },
+  "staging": {
+    "staticPath": "",
+    "staticHost": "https://s3.us-east-1.amazonaws.com/manufacturit-frontend-staging/"
+  }
+}

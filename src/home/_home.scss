@@ -1,0 +1,35 @@
+@import "../core/ui/style/reference/color";
+
+@keyframes animateLogo {
+  0%,
+  100% {
+    fill: $red;
+  }
+
+  50% {
+    fill: $blue;
+  }
+}
+
+.hipo-logo {
+  position: relative;
+  left: 50%;
+
+  margin: 50px 0;
+
+  transform: translateX(-50%);
+
+  path {
+    animation: animateLogo 5s ease infinite;
+  }
+
+  &:hover {
+    path {
+      animation-play-state: paused;
+    }
+  }
+}
+
+.home {
+  text-align: center;
+}
