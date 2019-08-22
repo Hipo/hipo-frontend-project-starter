@@ -16,7 +16,7 @@ interface ModalOwnProps {
   closeTimeout?: number;
   shouldCloseOnOverlayClick?: boolean;
   customClassName?: string;
-  children?: JSX.Element;
+  children?: React.ReactNode;
 }
 
 ReactModal.defaultStyles = {};
