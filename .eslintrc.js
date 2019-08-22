@@ -71,6 +71,7 @@ module.exports = {
     "no-undefined": 0,
     complexity: ["error", 10],
     "func-names": 0,
+    "class-methods-use-this": 0,
 
     // 👇🏻 these will be fixed inside `eslint-config-hipo-react`
     "react/destructuring-assignment": 0,
@@ -97,6 +98,7 @@ module.exports = {
         }
       }
     ],
+    "react/require-optimization": 0,
 
     // tsc already catches these kind of errors
     "no-undef": 0

@@ -7,21 +7,24 @@ import getPublicRouteComponents from "../route/publicRoutes";
 import getProtectedRouteComponents from "../route/protectedRoutes";
 import NotFound from "../../components/NotFound";
 import RouteLoading from "../../components/RouteLoading";
+import ErrorBoundary from "../error/ErrorBoundary";
 
 function RootApp() {
   return (
     <React.StrictMode>
-      <nav>
-        <Link to={"/"}>{"home"}</Link> <Link to={"counter"}>{"counter"}</Link>
-      </nav>
+      <ErrorBoundary>
+        <nav>
+          <Link to={"/"}>{"home"}</Link> <Link to={"counter"}>{"counter"}</Link>
+        </nav>
 
-      <Suspense fallback={<RouteLoading />}>
-        <Router>
-          <NotFound default={true} />
-          {getPublicRouteComponents()}
-          {getProtectedRouteComponents()}
-        </Router>
-      </Suspense>
+        <Suspense fallback={<RouteLoading />}>
+          <Router>
+            <NotFound default={true} />
+            {getPublicRouteComponents()}
+            {getProtectedRouteComponents()}
+          </Router>
+        </Suspense>
+      </ErrorBoundary>
     </React.StrictMode>
   );
 }
