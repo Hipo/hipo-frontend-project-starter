@@ -1,3 +1,5 @@
+import "../ui/style/_overrides.scss";
+
 import {hot} from "react-hot-loader/root";
 import React, {Suspense} from "react";
 import {Router, Link} from "@reach/router";
