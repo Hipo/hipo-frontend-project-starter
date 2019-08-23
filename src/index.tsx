@@ -9,14 +9,13 @@ import "regenerator-runtime/runtime";
 import React from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
-import Axios from "axios";
 
 import RootApp from "./core/root-app/RootApp";
 import NetworkManager from "./core/network-manager/NetworkManager";
 import authenticationManager from "./core/authenticationManager";
 import {createReduxStore} from "./core/redux/storeUtils";
 import {ReduxStoreShape} from "./core/redux/models/store";
-import {UserProfileModel} from "./authentication/model/authenticationEndpointModels";
+import authenticationApi from "./authentication/api/authenticationApi";
 
 // initSentry();
 const networkManager = new NetworkManager({
@@ -27,12 +26,10 @@ const networkManager = new NetworkManager({
   }
 });
 
-// This initial authenticated profile check request should not include the interceptors provided to axios instance used in `NetworkManager`.
-Axios.get("/profiles/me/", {
-  baseURL: API_BASE_URL
-})
+authenticationApi
+  .getAuthUser()
   .then((response) => {
-    const profileData = response.data as UserProfileModel;
+    const profileData = response.data;
 
     // setUserContextForSentry(profileData);
     bootstrapApp({

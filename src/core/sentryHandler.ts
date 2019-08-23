@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/browser";
 
 import packageJson from "../../package.json";
-import {UserProfileModel} from "../authentication/model/authenticationEndpointModels";
+import {UserProfileModel} from "../authentication/api/authenticationApiModels";
 import {isDevelopmentEnv, isStaging} from "../utils/globalVariables";
 
 interface SentryExceptionExtraData {
