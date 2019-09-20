@@ -1,8 +1,5 @@
 # Hipo Frontend TypeScript Project Template
 
-[![dependencies][dependencies-image] ][dependencies-url]
-[![devdependencies][devdependencies-image] ][devdependencies-url]
-
 This template includes all the configurations for kick-starting a project with React and TypeScript.
 
 ## Table of Contents
