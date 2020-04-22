@@ -2,13 +2,12 @@ import "./_counter.scss";
 
 import React, {useState} from "react";
 import classNames from "classnames";
-import {RouteComponentProps} from "@reach/router";
 
-type TCounterProps = {
+interface CounterOwnProps {
   customClassName?: string;
-} & RouteComponentProps;
+}
 
-function Counter({customClassName}: TCounterProps) {
+function Counter({customClassName}: CounterOwnProps) {
   const [value, setValue] = useState(0);
   const containerClassName = classNames("counter-container", customClassName);
 

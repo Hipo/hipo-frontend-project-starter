@@ -1,8 +1,7 @@
 import React, {FunctionComponent, useState} from "react";
-import {RouteComponentProps} from "@reach/router";
-import ReportModal from "./modal/components/report/ReportModal";
+import ReportModal from "../../../../components/modal/components/report/ReportModal";
 
-const NotFound: FunctionComponent<RouteComponentProps> = () => {
+const NotFoundPage: FunctionComponent = () => {
   const [isReportModalOpen, toggleReportModal] = useState(false);
 
   return (
@@ -26,4 +25,4 @@ const NotFound: FunctionComponent<RouteComponentProps> = () => {
   }
 };
 
-export default NotFound;
+export default NotFoundPage;

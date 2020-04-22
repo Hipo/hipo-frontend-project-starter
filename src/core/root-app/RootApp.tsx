@@ -2,31 +2,41 @@ import "../ui/style/_overrides.scss";
 
 import {hot} from "react-hot-loader/root";
 import React, {Suspense} from "react";
-import {Router, Link} from "@reach/router";
+import {BrowserRouter, Route, Link, Switch} from "react-router-dom";
 
 import {isDevelopmentEnv} from "../../utils/globalVariables";
 import getPublicRouteComponents from "../route/publicRoutes";
 import getProtectedRouteComponents from "../route/protectedRoutes";
-import NotFound from "../../components/NotFound";
+import {getPublicFallbackRoutes} from "../route/fallbackRoutes";
 import RouteLoading from "../../components/RouteLoading";
 import ErrorBoundary from "../error/ErrorBoundary";
 
 function RootApp() {
   return (
+    <BrowserRouter basename={"/"}>
+      <Route path={"/"} component={AppWithErrorBoundary} />
+    </BrowserRouter>
+  );
+}
+
+function AppWithErrorBoundary() {
+  return (
     <React.StrictMode>
-      <ErrorBoundary>
+      <Suspense fallback={<RouteLoading />}>
         <nav>
           <Link to={"/"}>{"home"}</Link> <Link to={"counter"}>{"counter"}</Link>
         </nav>
 
-        <Suspense fallback={<RouteLoading />}>
-          <Router>
-            <NotFound default={true} />
-            {getPublicRouteComponents()}
-            {getProtectedRouteComponents()}
-          </Router>
-        </Suspense>
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <Switch>
+            {[
+              ...getPublicRouteComponents(),
+              ...getProtectedRouteComponents(),
+              ...getPublicFallbackRoutes()
+            ]}
+          </Switch>
+        </ErrorBoundary>
+      </Suspense>
     </React.StrictMode>
   );
 }

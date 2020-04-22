@@ -1,12 +1,14 @@
 import React, {Component, ErrorInfo} from "react";
-import {sendSentryAnException} from "../sentryHandler";
+
 import ErrorBoundaryFallback from "./ErrorBoundaryFallback";
+import {sendSentryAnException} from "../../core/sentryHandler";
 
 type TErrorBoundaryState = ReturnType<typeof getInitialState>;
 
 function getInitialState() {
   return Object.freeze({
-    error: null as null | Error
+    error: null as null | Error,
+    eventId: ""
   });
 }
 
@@ -20,21 +22,27 @@ class ErrorBoundary extends Component<{}, TErrorBoundaryState> {
   /* eslint-enable react/sort-comp */
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // You can also log the error to an error reporting service
-    console.error(error, errorInfo);
-
-    sendSentryAnException(error, {
-      title: "ErrorBoundary",
-      data: errorInfo
-    });
+    sendSentryAnException(
+      error,
+      {
+        title: "ErrorBoundary",
+        data: errorInfo
+      },
+      this.setSentryEventId
+    );
   }
 
+  setSentryEventId = (eventId: string) => {
+    this.setState({
+      eventId
+    });
+  };
+
   render() {
-    const {error} = this.state;
+    const {error, eventId} = this.state;
 
     if (error) {
-      // You can render any custom fallback UI
-      return <ErrorBoundaryFallback error={error} />;
+      return <ErrorBoundaryFallback error={error} eventId={eventId} />;
     }
 
     return this.props.children;

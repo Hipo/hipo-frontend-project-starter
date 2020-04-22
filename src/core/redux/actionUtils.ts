@@ -5,14 +5,20 @@ import {
 } from "./models/action";
 import {ASYNC_ACTION_PHASE} from "./reduxConstants";
 
+function getReduxActionTypeName(base: string) {
+  return (actionTitle: string) => `@@${base}/${actionTitle}`;
+}
+
 function getAsyncActionTypes(base: string): AsyncActionTypes {
+  const actionTypeNameGenerator = getReduxActionTypeName(base);
+
   return {
     BASE: base,
-    REQUEST_TRIGGER: `@@${base}/REQUEST_TRIGGER`,
-    REQUEST_SUCCESS: `@@${base}/REQUEST_SUCCESS`,
-    REQUEST_ERROR: `@@${base}/REQUEST_ERROR`,
-    REQUEST_CANCELLED: `@@${base}/REQUEST_CANCELLED`,
-    REQUEST_CLEANUP: `@@${base}/REQUEST_CLEANUP`
+    REQUEST_TRIGGER: actionTypeNameGenerator("REQUEST_TRIGGER"),
+    REQUEST_SUCCESS: actionTypeNameGenerator("REQUEST_SUCCESS"),
+    REQUEST_ERROR: actionTypeNameGenerator("REQUEST_ERROR"),
+    REQUEST_CANCELLED: actionTypeNameGenerator("REQUEST_CANCELLED"),
+    REQUEST_CLEANUP: actionTypeNameGenerator("REQUEST_CLEANUP")
   };
 }
 
@@ -55,7 +61,9 @@ function generateAsyncActionCreators<
       typeBase: actionTypes.BASE,
       isAsync: true,
       asyncPhase: ASYNC_ACTION_PHASE.ERROR,
-      payload
+      payload: {
+        data: payload
+      }
     }),
     cancel: () => ({
       type: actionTypes.REQUEST_CANCELLED,
@@ -73,6 +81,7 @@ function generateAsyncActionCreators<
 }
 
 export {
+  getReduxActionTypeName,
   getAsyncActionTypes,
   generateAsyncActionCreators,
   getTriggerActionCreatorAsPromiseTyped

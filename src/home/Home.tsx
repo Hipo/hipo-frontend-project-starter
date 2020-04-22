@@ -4,7 +4,6 @@ import "./_home.scss";
 
 import React from "react";
 import {useSelector} from "react-redux";
-import {RouteComponentProps} from "@reach/router";
 
 import {authenticationProfileSelector} from "../authentication/redux/util/authenticationReduxUtils";
 
@@ -12,7 +11,7 @@ export interface HomeOwnProps {
   name: string;
 }
 
-type THomeProps = HomeOwnProps & RouteComponentProps;
+type THomeProps = HomeOwnProps;
 
 function Home(props: THomeProps) {
   const authProfile = useSelector(authenticationProfileSelector);

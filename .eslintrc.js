@@ -66,12 +66,14 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
 
     // 👇🏻 these will be fixed inside `eslint-config-hipo-base`
     "no-undefined": 0,
-    complexity: ["error", 10],
+    complexity: ["error", 20],
     "func-names": 0,
     "class-methods-use-this": 0,
+    "id-length": 0,
 
     // 👇🏻 these will be fixed inside `eslint-config-hipo-react`
     "react/destructuring-assignment": 0,
@@ -99,6 +101,11 @@ module.exports = {
       }
     ],
     "react/require-optimization": 0,
+    "react/no-multi-comp": ["error", {
+      ignoreStateless: true
+    }],
+    "react/no-did-update-set-state": 0,
+    "react/prop-types": 0,
 
     // tsc already catches these kind of errors
     "no-undef": 0
