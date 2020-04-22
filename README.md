@@ -23,6 +23,7 @@ For now, you need to manually copy-paste all the files from the template into yo
 - `apiConfig:` Configurations for the API requests in different environments.
 - `assetConfig:` Paths for the assets in different environments
 - `s3Config:` S3 configurations for different environments.
+- `sentryConfig:` Sentry configurations for different environments.
 
 3. Update `changelog-context-variables.json` to include your project's `codebaseProjectName`.
 
