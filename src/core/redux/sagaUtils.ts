@@ -13,7 +13,7 @@ import {AxiosPromise} from "axios";
 
 import {TApiHandlerCreator} from "../network-manager/apiHandler";
 import {AsyncActionTypes} from "./models/action";
-import {TAsyncSaga, TAsyncSagaFactoryFunc} from "./models/saga";
+import {TAsyncSaga, TAsyncSagaFactoryFunc, PollingSagaOptions} from "./models/saga";
 import {ASYNC_ACTION_PHASE} from "./reduxConstants";
 import {POLLING_INTERVAL} from "../network-manager/networkConstants";
 
@@ -39,9 +39,11 @@ function sagaWatcherFactory<T>(
 
 function pollingSagaWatcherFactory<T>(
   apiHandler: TApiHandlerCreator<T>,
-  actionTypes: AsyncActionTypes
+  actionTypes: AsyncActionTypes,
+  pollingOptions: PollingSagaOptions
 ) {
-  const saga = (arg: T) => generatePollingSaga<T>(apiHandler, actionTypes, arg);
+  const saga = (arg: T) =>
+    generatePollingSaga<T>(apiHandler, actionTypes, arg, pollingOptions);
 
   return {
     saga,
@@ -89,13 +91,64 @@ function generateBasicAsyncSaga<TApiHandlerArgumentShape = any>(
   })();
 }
 
+function generateTokenAuthSaga<
+  TriggerActionArgument extends {requestPayload: any; rememberMe: boolean}
+>(
+  apiHandler: (payload: TriggerActionArgument["requestPayload"]) => AxiosPromise<any>,
+  actionTypes: AsyncActionTypes,
+  payload: TriggerActionArgument
+): TAsyncSaga {
+  return (function* basicSaga() {
+    const putEffectAction = {
+      typeBase: actionTypes.BASE,
+      isAsync: true,
+      payload: {}
+    };
+
+    try {
+      const response = yield call(apiHandler, payload.requestPayload);
+
+      // setAuthenticationTokenAndSentryUser(response.data, payload.rememberMe);
+
+      yield put({
+        ...putEffectAction,
+        type: actionTypes.REQUEST_SUCCESS,
+        payload: response.data,
+        asyncPhase: ASYNC_ACTION_PHASE.SUCCESS
+      });
+    } catch (error) {
+      yield put({
+        ...putEffectAction,
+        type: actionTypes.REQUEST_ERROR,
+        payload: error,
+        asyncPhase: ASYNC_ACTION_PHASE.ERROR
+      });
+    } finally {
+      if (yield cancelled()) {
+        yield put({
+          ...putEffectAction,
+          type: actionTypes.REQUEST_CLEANUP,
+          asyncPhase: ASYNC_ACTION_PHASE.CLEANUP
+        });
+      }
+    }
+  })();
+}
+
 function generatePollingSaga<TApiHandlerArgumentShape = any>(
   apiHandler: (payload: TApiHandlerArgumentShape) => AxiosPromise<any>,
   actionTypes: AsyncActionTypes,
-  payload: TApiHandlerArgumentShape,
-  options = {interval: POLLING_INTERVAL}
+  payload: TApiHandlerArgumentShape & {"@@frontendPollingInterval"?: number},
+  options: PollingSagaOptions
 ): TAsyncSaga {
-  const {interval} = options;
+  let {interval = POLLING_INTERVAL} = options;
+  const POLLING_REQUEST_TRIAL_LIMIT = 20;
+  const intervalFromPassedPayload = payload && payload["@@frontendPollingInterval"];
+
+  if (typeof intervalFromPassedPayload === "number") {
+    delete payload["@@frontendPollingInterval"];
+    interval = intervalFromPassedPayload;
+  }
 
   return (function* pollingSaga() {
     const putEffectAction = {
@@ -103,9 +156,11 @@ function generatePollingSaga<TApiHandlerArgumentShape = any>(
       isAsync: true,
       payload: {}
     };
+    let trialCount = 0;
 
     while (true) {
       try {
+        trialCount += 1;
         const response = yield call(apiHandler, payload);
 
         yield put({
@@ -115,6 +170,7 @@ function generatePollingSaga<TApiHandlerArgumentShape = any>(
           asyncPhase: ASYNC_ACTION_PHASE.SUCCESS
         });
 
+        trialCount = 0;
         yield delay(interval);
       } catch (error) {
         yield put({
@@ -123,6 +179,12 @@ function generatePollingSaga<TApiHandlerArgumentShape = any>(
           payload: error,
           asyncPhase: ASYNC_ACTION_PHASE.ERROR
         });
+
+        if (trialCount > POLLING_REQUEST_TRIAL_LIMIT) {
+          return;
+        }
+
+        yield delay(interval);
       } finally {
         if (yield cancelled()) {
           yield put({
@@ -209,7 +271,7 @@ function generatePollingWatcher(
   actionType: AsyncActionTypes,
   pollingSaga: TAsyncSagaFactoryFunc
 ) {
-  return function*() {
+  return function* () {
     while (true) {
       const triggerAction = yield take(actionType.REQUEST_TRIGGER);
 
@@ -222,4 +284,9 @@ function generatePollingWatcher(
 }
 
 export default generateRootSaga;
-export {sagaWatcherFactory, pollingSagaWatcherFactory};
+export {
+  sagaWatcherFactory,
+  pollingSagaWatcherFactory,
+  generateTokenAuthSaga,
+  generateDefaultAsyncWatcher
+};

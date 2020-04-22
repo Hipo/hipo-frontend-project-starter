@@ -41,7 +41,23 @@ module.exports = function(env = {target: "local"}) {
           ]
         },
         {
-          test: /\.(jpe?g|png)$/i,
+          test: /\.css$/,
+          use: [
+            "style-loader",
+            {
+              loader: "css-loader",
+              options: {
+                importLoaders: 1
+              }
+            },
+            {
+              loader: "postcss-loader",
+              options: postCssConfig
+            }
+          ]
+        },
+        {
+          test: /\.(jpe?g|png|csv|pdf)$/i,
           use: {
             loader: "file-loader",
             options: {

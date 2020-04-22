@@ -9,6 +9,7 @@
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
     "resolveJsonModule": true /* Include modules imported with '.json' extension. */,
     "noEmit": true /* do not emit output */,
+    "skipLibCheck": true,
 
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,

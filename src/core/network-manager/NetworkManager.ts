@@ -4,19 +4,23 @@ import {
   REQUEST_TYPES_WITH_BODY,
   CONTENT_TYPE_HEADER,
   JSON_CONTENT_TYPE,
-  HTTP_STATUS_CODES,
-  MANUALLY_CANCELLED_ERROR_TYPE
+  HTTP_STATUS_CODES
 } from "./networkConstants";
-import {generateFinalError, generateAuthorizationHeaderValue} from "./networkUtils";
-import {TAccessToken} from "./networkModels";
+import {
+  generateFinalError,
+  generateAuthorizationHeaderValue,
+  getNetworkBaseUrl
+} from "./networkUtils";
+import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../utils/error/errorConstants";
+import {AuthenticationToken} from "../../authentication/util/authenticationManager";
 
 const BASE_CONFIG: AxiosRequestConfig = {
-  baseURL: API_BASE_URL
+  baseURL: getNetworkBaseUrl()
 };
 
 export interface NetworkManagerShape {
   api: AxiosInstance;
-  updateToken: (x: TAccessToken) => void;
+  updateToken: (x: AuthenticationToken) => void;
 }
 
 class NetworkManager implements NetworkManagerShape {
@@ -40,7 +44,7 @@ class NetworkManager implements NetworkManagerShape {
     this.api = NetworkManager.createInstance(this.latestConfig);
   }
 
-  updateToken(token: TAccessToken) {
+  updateToken(token: AuthenticationToken) {
     const newNetworkConfig = {
       ...this.latestConfig
     };
@@ -89,25 +93,9 @@ class NetworkManager implements NetworkManagerShape {
           if (status === HTTP_STATUS_CODES.UNAUTHORIZED) {
             window.location.href = "/login";
           } else if (status === HTTP_STATUS_CODES.NOT_FOUND) {
-            window.location.href = "/not-found";
+            console.error(error);
           } else if (status === HTTP_STATUS_CODES.FORBIDDEN) {
-            //   sendSentryAnException(finalError);
-
-            throw new Error(JSON.stringify(finalError));
-          } else if (status >= HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-            //   sendSentryAnException(finalError);
-          } else {
-            const {fallback_message, detail} = finalError.data;
-
-            if (!fallback_message) {
-              // sendSentryAnException(finalError);
-            } else if (
-              !detail ||
-              typeof detail !== "object" ||
-              !Object.keys(detail).length
-            ) {
-              // sendSentryAnException(finalError);
-            }
+            // sendSentryAnException(finalError);
           }
         }
 

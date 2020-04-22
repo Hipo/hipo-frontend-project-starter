@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/browser";
 
 import packageJson from "../../package.json";
-import {UserProfileModel} from "../authentication/api/authenticationApiModels";
+import sentryConfig from "../../config/sentryConfig.json";
 import {isDevelopmentEnv, isStaging} from "../utils/globalVariables";
 
 interface SentryExceptionExtraData {
@@ -9,21 +9,18 @@ interface SentryExceptionExtraData {
   data: any;
 }
 
-type TSentryUserInfo =
-  | UserProfileModel
-  | {
-      username: string;
-    };
+type TSentryUserInfo = {
+  id: string;
+  email: string;
+};
 
-const SENTRY_DNS = "WHATEVER_IT_IS";
-const SENTRY_PROJECT_SLUG = "HIPO_PROJECT_TEMPLATE";
 const isDevEnv = isDevelopmentEnv();
 
 function initSentry() {
   if (!isDevEnv) {
     const config: Sentry.BrowserOptions = {
-      dsn: SENTRY_DNS,
-      release: `${SENTRY_PROJECT_SLUG}@${packageJson.version}`,
+      dsn: sentryConfig.dsn,
+      release: `${sentryConfig.projectSlug}@${packageJson.version}`,
       environment: TARGET_ENV_TYPE,
       attachStacktrace: true,
       integrations: (integrations) => {
@@ -46,27 +43,38 @@ function initSentry() {
   }
 }
 
-function sendSentryAnException(error: any, extra?: SentryExceptionExtraData) {
+function sendSentryAnException(
+  error: any,
+  extra?: SentryExceptionExtraData,
+  onCapture?: (eventId: string) => void
+) {
   if (!isDevEnv) {
     Sentry.withScope((scope) => {
       if (extra) {
-        scope.setExtra(extra.title, extra.data);
+        scope.setExtras(extra);
       }
-      Sentry.captureException(error);
+
+      const eventId = Sentry.captureException(error);
+
+      if (onCapture) {
+        onCapture(eventId);
+      }
     });
   }
 }
 
-function showReportDialog() {
+function showReportDialog(eventId: string) {
   if (!isDevEnv) {
-    Sentry.showReportDialog();
+    Sentry.showReportDialog({eventId});
   }
 }
 
-function setUserContextForSentry(userInfo: TSentryUserInfo) {
-  Sentry.configureScope((scope) => {
-    scope.setUser(userInfo);
-  });
+function setUserContextForSentry(userInfo: TSentryUserInfo | null) {
+  if (!isDevEnv) {
+    Sentry.configureScope((scope) => {
+      scope.setUser(userInfo);
+    });
+  }
 }
 
 export {initSentry, sendSentryAnException, showReportDialog, setUserContextForSentry};

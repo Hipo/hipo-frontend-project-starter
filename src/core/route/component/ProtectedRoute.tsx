@@ -1,24 +1,27 @@
 import React from "react";
-import {RouteComponentProps} from "@reach/router";
 import {useSelector} from "react-redux";
+import {RouteProps, Route, Redirect, useLocation} from "react-router-dom";
 
+import ROUTE_NAMES from "../util/routeNames";
 import {authenticationProfileSelector} from "../../../authentication/redux/util/authenticationReduxUtils";
-import UnreachableProtectedRouteMessage from "./UnreachableProtectedRouteMessage";
+import {generateRedirectStateFromLocation} from "../util/routeUtils";
 
-interface ProtectedRouteOwnProps {
-  component: React.ComponentType<RouteComponentProps>;
-}
-
-type TProtectedRouteProps = ProtectedRouteOwnProps & RouteComponentProps;
-
-function ProtectedRoute({component: PageComponent, ...rest}: TProtectedRouteProps) {
+function ProtectedRoute(routeProps: RouteProps) {
   const authProfile = useSelector(authenticationProfileSelector);
+  const location = useLocation();
 
   if (authProfile) {
-    return <PageComponent {...rest} />;
+    return <Route {...routeProps} />;
   }
 
-  return <UnreachableProtectedRouteMessage />;
+  return (
+    <Redirect
+      to={{
+        pathname: ROUTE_NAMES.ROOT,
+        state: generateRedirectStateFromLocation(location, true)
+      }}
+    />
+  );
 }
 
 export default ProtectedRoute;

@@ -7,4 +7,8 @@ type TAsyncSaga = IterableIterator<
 
 type TAsyncSagaFactoryFunc = (payload: any) => TAsyncSaga;
 
-export {TAsyncSaga, TAsyncSagaFactoryFunc};
+interface PollingSagaOptions {
+  interval?: number;
+}
+
+export {TAsyncSaga, TAsyncSagaFactoryFunc, PollingSagaOptions};

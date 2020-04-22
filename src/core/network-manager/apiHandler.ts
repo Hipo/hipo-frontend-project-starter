@@ -7,10 +7,11 @@ import axios, {
 import {CANCEL} from "redux-saga";
 
 import {NetworkManagerShape} from "./NetworkManager";
+import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../utils/error/errorConstants";
 
 type TRequestMethods = "get" | "post" | "put" | "patch" | "delete";
 
-interface ApiHandlerOptions {
+export interface ApiHandlerOptions {
   payload?: any;
   settings?: AxiosRequestConfig;
 }

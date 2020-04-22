@@ -12,7 +12,7 @@ import {Provider} from "react-redux";
 
 import RootApp from "./core/root-app/RootApp";
 import NetworkManager from "./core/network-manager/NetworkManager";
-import authenticationManager from "./core/authenticationManager";
+import authenticationManager from "./authentication/util/authenticationManager";
 import {createReduxStore} from "./core/redux/storeUtils";
 import {ReduxStoreShape} from "./core/redux/models/store";
 import authenticationApi from "./authentication/api/authenticationApi";

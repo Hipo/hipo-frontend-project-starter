@@ -10,11 +10,9 @@ const Counter = lazy(() =>
 
 function getProtectedRouteComponents() {
   return [
-    <ProtectedRoute
-      key={`route:=${ROUTE_NAMES.COUNTER}`}
-      path={ROUTE_NAMES.COUNTER}
-      component={Counter}
-    />
+    <ProtectedRoute key={`route:=${ROUTE_NAMES.COUNTER}`} path={ROUTE_NAMES.COUNTER}>
+      <Counter />
+    </ProtectedRoute>
   ];
 }
 

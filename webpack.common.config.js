@@ -3,6 +3,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const apiConfig = require("./config/apiConfig.json");
 const BASE_PATH = path.resolve(__dirname, "");
@@ -43,7 +44,8 @@ module.exports = function(env) {
     optimization: {
       splitChunks: {
         chunks: "all",
-        maxInitialRequests: Infinity,
+        maxInitialRequests: 5,
+        minSize: 90000,
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
@@ -66,6 +68,7 @@ module.exports = function(env) {
       new CleanWebpackPlugin({
         verbose: true
       }),
+      new CopyPlugin([{from: "public", to: DIST_PATH}]),
       new ForkTsCheckerWebpackPlugin({eslint: true}),
       new HtmlWebpackPlugin({
         favicon: path.join(APP_PATH, "favicon.ico"),

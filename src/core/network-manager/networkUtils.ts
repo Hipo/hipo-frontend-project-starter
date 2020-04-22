@@ -1,10 +1,14 @@
-import {UNKNOWN_ERROR, MANUALLY_CANCELLED_ERROR_TYPE} from "./networkConstants";
-import {TAccessToken} from "./networkModels";
+import {HTTP_STATUS_CODES} from "./networkConstants";
+import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../utils/error/errorConstants";
+import {AuthenticationToken} from "../../authentication/util/authenticationManager";
+import {createErrorWithApiErrorShapeFromString} from "../../utils/error/errorUtils";
 
 function generateFinalError(error: any) {
   const unknownError = {
-    ...UNKNOWN_ERROR,
-    config: (error && error.config) || UNKNOWN_ERROR.config
+    data: createErrorWithApiErrorShapeFromString("An error occured", "UnknownError"),
+    status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+    message: "UnknownError",
+    config: (error && error.config) || {}
   };
 
   let finalError = unknownError;
@@ -15,11 +19,10 @@ function generateFinalError(error: any) {
     if (error.message === MANUALLY_CANCELLED_ERROR_TYPE) {
       finalError = {
         ...unknownError,
-        data: {
-          type: MANUALLY_CANCELLED_ERROR_TYPE,
-          detail: {},
-          fallback_message: "Request manually cancelled"
-        },
+        data: createErrorWithApiErrorShapeFromString(
+          "Request manually cancelled",
+          MANUALLY_CANCELLED_ERROR_TYPE
+        ),
         message: MANUALLY_CANCELLED_ERROR_TYPE
       };
     }
@@ -28,8 +31,12 @@ function generateFinalError(error: any) {
   return finalError;
 }
 
-function generateAuthorizationHeaderValue(token: TAccessToken) {
+function generateAuthorizationHeaderValue(token: AuthenticationToken) {
   return token ? `Token ${token}` : null;
 }
 
-export {generateFinalError, generateAuthorizationHeaderValue};
+function getNetworkBaseUrl() {
+  return API_BASE_URL;
+}
+
+export {generateFinalError, generateAuthorizationHeaderValue, getNetworkBaseUrl};

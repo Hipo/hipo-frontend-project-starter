@@ -4,6 +4,7 @@ const webpackMerge = require("webpack-merge");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const S3Plugin = require("webpack-s3-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const postCssConfig = require("./postcss.config.js");
 const commonConfig = require("./webpack.common.config.js");
@@ -23,7 +24,7 @@ module.exports = function(env = {target: "local"}) {
       chunkFilename: "[name]-[chunkhash].bundle.js"
     },
 
-    devtool: "sourcemap",
+    devtool: "source-map",
 
     module: {
       rules: [
@@ -60,7 +61,23 @@ module.exports = function(env = {target: "local"}) {
           ]
         },
         {
-          test: /\.(jpe?g|png)$/i,
+          test: /\.css$/,
+          use: [
+            "style-loader",
+            {
+              loader: "css-loader",
+              options: {
+                importLoaders: 1
+              }
+            },
+            {
+              loader: "postcss-loader",
+              options: postCssConfig
+            }
+          ]
+        },
+        {
+          test: /\.(jpe?g|png|csv|pdf)$/i,
           use: [
             {
               loader: "file-loader",
@@ -76,11 +93,10 @@ module.exports = function(env = {target: "local"}) {
     },
 
     optimization: {
+      minimize: true,
       minimizer: [
         new TerserPlugin({
-          sourceMap: true,
-          parallel: true,
-          cache: true
+          sourceMap: true
         })
       ]
     },
@@ -101,6 +117,12 @@ module.exports = function(env = {target: "local"}) {
           context: __dirname
         }
       }),
+      new CompressionPlugin({
+        test: /\.(js|css)$/,
+        exclude: /.*\.map/,
+        filename: "[path]",
+        algorithm: "gzip"
+      }),
       new S3Plugin({
         directory: DIST_PATH,
         exclude: /.*\.map/,
@@ -110,7 +132,36 @@ module.exports = function(env = {target: "local"}) {
           region: s3Config.common.region
         },
         s3UploadOptions: {
-          Bucket: s3Config[env.target].bucket
+          Bucket: s3Config[env.target].bucket,
+          ContentDisposition(fileName) {
+            let disposition;
+
+            if (/\.csv/.test(fileName)) {
+              disposition = `attachment;filename=${fileName}`;
+            }
+
+            return disposition;
+          },
+          ContentEncoding(fileName) {
+            let encoding;
+
+            if (/\.css/.test(fileName) || /\.js/.test(fileName)) {
+              encoding = "gzip";
+            }
+
+            return encoding;
+          },
+          ContentType(fileName) {
+            let type;
+
+            if (/\.css/.test(fileName)) {
+              type = "text/css";
+            } else if (/\.js/.test(fileName)) {
+              type = "text/javascript";
+            }
+
+            return type;
+          }
         },
         noCdnizer: true,
         progress: true
