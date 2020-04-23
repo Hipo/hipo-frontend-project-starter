@@ -1,10 +1,9 @@
-function generateRedirectStateFromLocation(
-  location: any,
-  shouldOverwriteState?: boolean
-) {
+import {LocationDescriptorObject} from "history";
+
+function generateRedirectStateFromLocation(location: LocationDescriptorObject) {
   return {
     from: location,
-    ...(shouldOverwriteState ? location.state : {})
+    ...location.state
   };
 }
 
