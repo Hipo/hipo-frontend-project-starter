@@ -3,11 +3,11 @@ import "./_counter.scss";
 import React, {useState} from "react";
 import classNames from "classnames";
 
-interface CounterOwnProps {
+interface CounterProps {
   customClassName?: string;
 }
 
-function Counter({customClassName}: CounterOwnProps) {
+function Counter({customClassName}: CounterProps) {
   const [value, setValue] = useState(0);
   const containerClassName = classNames("counter-container", customClassName);
 

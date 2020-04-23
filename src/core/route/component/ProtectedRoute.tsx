@@ -18,7 +18,7 @@ function ProtectedRoute(routeProps: RouteProps) {
     <Redirect
       to={{
         pathname: ROUTE_NAMES.ROOT,
-        state: generateRedirectStateFromLocation(location, true)
+        state: generateRedirectStateFromLocation(location)
       }}
     />
   );

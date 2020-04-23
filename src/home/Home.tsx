@@ -7,13 +7,11 @@ import {useSelector} from "react-redux";
 
 import {authenticationProfileSelector} from "../authentication/redux/util/authenticationReduxUtils";
 
-export interface HomeOwnProps {
+interface HomeProps {
   name: string;
 }
 
-type THomeProps = HomeOwnProps;
-
-function Home(props: THomeProps) {
+function Home(props: HomeProps) {
   const authProfile = useSelector(authenticationProfileSelector);
 
   return (

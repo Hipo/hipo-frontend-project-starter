@@ -1,6 +1,7 @@
 import {MinimalAsyncStoreState} from "./models/store";
 import {AsyncActionTypes, TReduxActionWithPayload} from "./models/action";
 import {ApiErrorShape} from "../network-manager/networkModels";
+import {createErrorWithApiErrorShapeFromString} from "../../utils/error/errorUtils";
 
 function reduxAsyncReducerFactory<T>(
   initialState: MinimalAsyncStoreState<T>,
@@ -8,60 +9,72 @@ function reduxAsyncReducerFactory<T>(
   // @ts-ignore
   type: "basic"
 ) {
-  return (state = initialState, action: TReduxActionWithPayload): typeof initialState => {
+  return function asyncReducer(
+    state = initialState,
+    action: TReduxActionWithPayload
+  ): typeof initialState {
+    let newState;
+
     switch (action.type) {
       case actionTypes.REQUEST_TRIGGER: {
-        return {
+        newState = {
           ...state,
           isRequestPending: true,
           isRequestFetched: false
         };
+
+        break;
       }
 
       case actionTypes.REQUEST_SUCCESS: {
-        return {
+        newState = {
           isRequestPending: false,
           isRequestFetched: true,
           data: action.payload,
           errorInfo: null
         };
+
+        break;
       }
 
       case actionTypes.REQUEST_ERROR: {
         let finalErrorInfo: null | ApiErrorShape = null;
 
         if (action.payload instanceof Error) {
-          finalErrorInfo = {
-            type: "ReducerFactory",
-            detail: {
-              non_field_errors: [action.payload.message]
-            },
-            fallback_message: action.payload.message
-          };
+          finalErrorInfo = createErrorWithApiErrorShapeFromString(
+            action.payload.message,
+            "ReducerFactory"
+          );
         } else if (action.payload && action.payload.data) {
           finalErrorInfo = action.payload.data;
         }
 
-        return {
+        newState = {
           isRequestPending: false,
           isRequestFetched: true,
           data: null,
           errorInfo: finalErrorInfo
         };
+
+        break;
       }
 
       case actionTypes.REQUEST_CANCELLED: {
-        return {
+        newState = {
           isRequestPending: false,
           isRequestFetched: false,
           data: null,
           errorInfo: null
         };
+
+        break;
       }
 
       default:
-        return state;
+        newState = state;
     }
+
+    return newState;
   };
 }
 

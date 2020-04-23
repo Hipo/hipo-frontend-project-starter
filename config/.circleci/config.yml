@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  deploy_staging:
+    docker:
+      - image: circleci/node:12.16.1
+    steps:
+      - checkout
+      - run: npm ci --no-progress --prefer-offline
+      - run: npm run build:release -- --env.target=staging --env.awsAccessKeyId=${AWS_STAGING_ACCESS_KEY} --env.awsSecretAccessKey=${AWS_STAGING_SECRET_ACCESS_KEY}
+      # - run:
+      #     name: Run QA tests
+      #     command: curl -i -X POST 'http://testrunner.hipolabs.com/job/{PROJECT_NAME}/build?token=manufacturit' --user ${TEST_RUNNER_USERNAME}:${TEST_RUNNER_PASSWORD}
+  # deploy_production:
+  #   docker:
+  #     - image: circleci/node:12.16.1
+  #   steps:
+  #     - checkout
+  #     - run: npm ci --no-progress --prefer-offline
+  #     - run: npm run build:release -- --env.target=production --env.awsAccessKeyId=${AWS_PRODUCTION_ACCESS_KEY} --env.awsSecretAccessKey=${AWS_PRODUCTION_SECRET_ACCESS_KEY}
+workflows:
+  version: 2
+  build:
+    jobs:
+      - deploy_staging:
+          filters:
+            branches:
+              only: staging
+      # - deploy_production:
+      #     filters:
+      #       branches:
+      #         only: production

@@ -1,7 +1,7 @@
-import React, {FunctionComponent, useState} from "react";
+import React, {useState} from "react";
 import ReportModal from "../../../../components/modal/components/report/ReportModal";
 
-const NotFoundPage: FunctionComponent = () => {
+function NotFoundPage() {
   const [isReportModalOpen, toggleReportModal] = useState(false);
 
   return (
@@ -23,6 +23,6 @@ const NotFoundPage: FunctionComponent = () => {
   function handleReportModalClose() {
     toggleReportModal(!isReportModalOpen);
   }
-};
+}
 
 export default NotFoundPage;
