@@ -7,7 +7,8 @@ module.exports = function(api) {
         "@babel/plugin-proposal-class-properties",
         "@babel/plugin-transform-spread",
         "@babel/plugin-proposal-object-rest-spread",
-        "@babel/plugin-proposal-optional-chaining"
+        "@babel/plugin-proposal-optional-chaining",
+        "@babel/plugin-proposal-nullish-coalescing-operator"
       ]
     };
   };
