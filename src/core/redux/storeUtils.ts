@@ -27,7 +27,12 @@ function createReduxStore(customInitialState: Partial<ReduxStoreShape> = {}) {
         })
       : compose;
 
-  const reduxStore = createStore<ReduxStoreShape, TReduxActionWithPayload, {}, {}>(
+  const reduxStore = createStore<
+    ReduxStoreShape,
+    TReduxActionWithPayload,
+    Record<string, unknown>,
+    Record<string, unknown>
+  >(
     rootReducer,
     generateInitialReduxStoreState(customInitialState),
     composeEnhancers(applyMiddleware(sagaMiddleware, promisifyAsyncActionsMiddleware))

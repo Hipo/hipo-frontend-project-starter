@@ -1,5 +1,7 @@
 const path = require("path");
 
+const COMPLEXITY_LIMIT = 20;
+
 module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: ["react", "react-hooks", "@typescript-eslint", "jsx-a11y"],
@@ -29,7 +31,8 @@ module.exports = {
   },
   settings: {
     react: {
-      version: "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
+      // Tells eslint-plugin-react to automatically detect the version of React to use
+      version: "detect"
     }
   },
   globals: {
@@ -67,13 +70,17 @@ module.exports = {
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/ban-ts-comment": 1,
 
     // 👇🏻 these will be fixed inside `eslint-config-hipo-base`
     "no-undefined": 0,
-    complexity: ["error", 20],
+    complexity: ["error", COMPLEXITY_LIMIT],
     "func-names": 0,
     "class-methods-use-this": 0,
     "id-length": 0,
+    "no-use-before-define": ["error", { "functions": false, "classes": true }],
+    "camelcase": 0,
 
     // 👇🏻 these will be fixed inside `eslint-config-hipo-react`
     "react/destructuring-assignment": 0,

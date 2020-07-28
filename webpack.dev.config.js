@@ -1,4 +1,4 @@
-const webpackMerge = require("webpack-merge");
+const {merge} = require("webpack-merge");
 const path = require("path");
 const webpack = require("webpack");
 
@@ -96,5 +96,5 @@ module.exports = function(env = {target: "local"}) {
     ]
   };
 
-  return webpackMerge(commonConfig(env), devConfig);
+  return merge(commonConfig(env), devConfig);
 };
