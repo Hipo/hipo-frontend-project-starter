@@ -12,7 +12,7 @@ function getInitialState() {
   });
 }
 
-class ErrorBoundary extends Component<{}, TErrorBoundaryState> {
+class ErrorBoundary extends Component<Record<string, unknown>, TErrorBoundaryState> {
   /* eslint-disable react/sort-comp */
   readonly state = getInitialState();
 

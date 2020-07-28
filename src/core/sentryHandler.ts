@@ -51,7 +51,7 @@ function sendSentryAnException(
   if (!isDevEnv) {
     Sentry.withScope((scope) => {
       if (extra) {
-        scope.setExtras(extra);
+        scope.setExtras((extra as unknown) as Record<string, unknown>);
       }
 
       const eventId = Sentry.captureException(error);

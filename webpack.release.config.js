@@ -1,6 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
-const webpackMerge = require("webpack-merge");
+const {merge} = require("webpack-merge");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const S3Plugin = require("webpack-s3-plugin");
@@ -169,5 +169,5 @@ module.exports = function(env = {target: "local"}) {
     ]
   };
 
-  return webpackMerge(commonConfig(env), releaseConfig);
+  return merge(commonConfig(env), releaseConfig);
 };

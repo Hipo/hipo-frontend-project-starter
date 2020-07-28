@@ -68,8 +68,16 @@ module.exports = function(env) {
       new CleanWebpackPlugin({
         verbose: true
       }),
-      new CopyPlugin([{from: "public", to: DIST_PATH}]),
-      new ForkTsCheckerWebpackPlugin({eslint: true}),
+      new CopyPlugin({patterns: [{from: "public", to: DIST_PATH}]}),
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          diagnosticOptions: {
+            semantic: true,
+            syntactic: true,
+          },
+        },
+        eslint: {files: "./src/**/*.{ts,tsx,js,jsx}"}
+      }),
       new HtmlWebpackPlugin({
         favicon: path.join(APP_PATH, "favicon.ico"),
         inject: true,
