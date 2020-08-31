@@ -49,6 +49,8 @@ const apiHandler = <TResponseType = any>(
     request = apiManager.api.patch(url, payload, settings);
   } else if (method === "post") {
     request = apiManager.api.post(url, payload, settings);
+  } else if (payload) {
+    request = apiManager.api.delete(url, {data: payload, ...settings});
   } else {
     request = apiManager.api.delete(url, settings);
   }
