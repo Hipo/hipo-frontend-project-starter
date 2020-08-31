@@ -44,7 +44,9 @@ function Form(props: FormProps) {
       onChange={handleFormChange}
       onSubmit={handleSubmit}>
       {Boolean(formError) && (
-        <p data-testid={`${testid}.form-error-message`}>{formError}</p>
+        <p data-testid={`${testid}.form-error-message`} className={"form-error-message"}>
+          {formError}
+        </p>
       )}
 
       {children}

@@ -1,0 +1,10 @@
+@import "../../core/ui/style/reference/color";
+@import "../../core/ui/style/reference/measure";
+
+.form-error-message {
+  padding: 7px 12px;
+
+  background-color: lighten($red, 20%);
+  border: 1px solid $red;
+  border-radius: $default-border-radius;
+}
