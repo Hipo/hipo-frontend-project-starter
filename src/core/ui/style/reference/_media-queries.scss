@@ -1,0 +1,29 @@
+$small-max-width: 767px;
+
+$medium-min-width: $small-max-width + 1px;
+$medium-max-width: 1150px;
+
+$large-min-width: $medium-max-width + 1px;
+$large-max-width: 1260px;
+
+$small-screen-query: "only screen and (max-width: " + $small-max-width + ")";
+$medium-screen-query: "only screen and (max-width: " + $medium-max-width + ")";
+$large-screen-query: "only screen and (min-width: " + $large-min-width + ")";
+
+@mixin for-small-devices {
+  @media #{$small-screen-query} {
+    @content;
+  }
+}
+
+@mixin for-medium-devices {
+  @media #{$medium-screen-query} {
+    @content;
+  }
+}
+
+@mixin for-large-devices {
+  @media #{$large-screen-query} {
+    @content;
+  }
+}
