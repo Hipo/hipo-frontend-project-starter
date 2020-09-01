@@ -15,7 +15,6 @@ export interface FormProps {
   onChange?: (event: React.SyntheticEvent) => void;
   customClassName?: string;
   isSubmitAllowed?: boolean;
-  shouldDisplayFieldErrorCountInErrorMessage?: boolean;
   skipErrorTypes?: Array<ArrayToUnion<typeof ERROR_TYPES>>;
 }
 
