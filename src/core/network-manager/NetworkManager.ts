@@ -13,9 +13,13 @@ import {
 } from "./networkUtils";
 import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../utils/error/errorConstants";
 import {AuthenticationToken} from "../../authentication/util/authenticationManager";
+import {stringifySearchParamsObject} from "../../utils/url/urlUtils";
 
 const BASE_CONFIG: AxiosRequestConfig = {
-  baseURL: getNetworkBaseUrl()
+  baseURL: getNetworkBaseUrl(),
+  paramsSerializer(params) {
+    return params ? stringifySearchParamsObject(params) : "";
+  }
 };
 
 export interface NetworkManagerShape {
