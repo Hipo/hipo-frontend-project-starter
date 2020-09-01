@@ -14,7 +14,7 @@ This template includes all the configurations for kick-starting a project with R
 
 For now, you need to manually copy-paste all the files from the template into your directory. Eventually, there will be a command-line tool that does this for you. After you copied all the files in this template, you will need to take the following steps:
 
-- This project requires Node >= 14.x and npm >= 6.x for proper development environment.
+- This project requires Node >= 10.x and npm >= 6.x for proper development environment.
 
 1. Update necessary fields inside `package.json` for your projects.
 
