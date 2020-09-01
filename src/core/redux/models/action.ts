@@ -23,6 +23,18 @@ type TReduxAsyncActionCreator<ArgumentType, P = any> = (
 
 type TReduxActionCreatorWithoutArgument = () => Action<string>;
 
+interface AsyncActionCreators<
+  TriggerActionCreatorArgumentType,
+  SuccessActionCreatorArgumentType,
+  ErrorActionCreatorArgumentType
+> {
+  trigger: TReduxAsyncActionCreator<TriggerActionCreatorArgumentType>;
+  success: TReduxAsyncActionCreator<SuccessActionCreatorArgumentType>;
+  error: TReduxAsyncActionCreator<ErrorActionCreatorArgumentType>;
+  cancel: TReduxActionCreatorWithoutArgument;
+  cleanup: TReduxActionCreatorWithoutArgument;
+}
+
 type TPromisifiedTriggerActionCreator<
   TActionCreators extends AsyncActionCreators<any, any, any>
 > = (
@@ -36,18 +48,6 @@ interface AsyncActionTypes {
   REQUEST_ERROR: string;
   REQUEST_CANCELLED: string;
   REQUEST_CLEANUP: string;
-}
-
-interface AsyncActionCreators<
-  TriggerActionCreatorArgumentType,
-  SuccessActionCreatorArgumentType,
-  ErrorActionCreatorArgumentType
-> {
-  trigger: TReduxAsyncActionCreator<TriggerActionCreatorArgumentType>;
-  success: TReduxAsyncActionCreator<SuccessActionCreatorArgumentType>;
-  error: TReduxAsyncActionCreator<ErrorActionCreatorArgumentType>;
-  cancel: TReduxActionCreatorWithoutArgument;
-  cleanup: TReduxActionCreatorWithoutArgument;
 }
 
 export {

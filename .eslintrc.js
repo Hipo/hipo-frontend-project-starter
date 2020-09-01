@@ -3,6 +3,7 @@ const path = require("path");
 const COMPLEXITY_LIMIT = 20;
 
 module.exports = {
+  root: true,
   parser: "@typescript-eslint/parser",
   plugins: ["react", "react-hooks", "@typescript-eslint", "jsx-a11y"],
   env: {
