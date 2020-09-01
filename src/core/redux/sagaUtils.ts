@@ -52,7 +52,7 @@ function pollingSagaWatcherFactory<T>(
 }
 
 function generateBasicAsyncSaga<TApiHandlerArgumentShape = any>(
-  apiHandler: (payload: TApiHandlerArgumentShape) => AxiosPromise<any>,
+  apiHandler: (apiHandlerArgument: TApiHandlerArgumentShape) => AxiosPromise<any>,
   actionTypes: AsyncActionTypes,
   payload: TApiHandlerArgumentShape
 ): TAsyncSaga {
@@ -94,7 +94,9 @@ function generateBasicAsyncSaga<TApiHandlerArgumentShape = any>(
 function generateTokenAuthSaga<
   TriggerActionArgument extends {requestPayload: any; rememberMe: boolean}
 >(
-  apiHandler: (payload: TriggerActionArgument["requestPayload"]) => AxiosPromise<any>,
+  apiHandler: (
+    apiHandlerArgument: TriggerActionArgument["requestPayload"]
+  ) => AxiosPromise<any>,
   actionTypes: AsyncActionTypes,
   payload: TriggerActionArgument
 ): TAsyncSaga {
@@ -136,7 +138,7 @@ function generateTokenAuthSaga<
 }
 
 function generatePollingSaga<TApiHandlerArgumentShape = any>(
-  apiHandler: (payload: TApiHandlerArgumentShape) => AxiosPromise<any>,
+  apiHandler: (apiHandlerArgument: TApiHandlerArgumentShape) => AxiosPromise<any>,
   actionTypes: AsyncActionTypes,
   payload: TApiHandlerArgumentShape & {"@@frontendPollingInterval"?: number},
   options: PollingSagaOptions
