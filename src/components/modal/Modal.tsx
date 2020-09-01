@@ -12,7 +12,6 @@ interface ModalProps {
   onClose: (...args: any[]) => void;
   onAfterOpen?: (...args: any[]) => void;
   onAfterClose?: (...args: any[]) => void;
-  canBeClosed?: boolean;
   closeTimeout?: number;
   shouldCloseOnOverlayClick?: boolean;
   customClassName?: string;
@@ -35,7 +34,6 @@ function Modal({
   customClassName,
   children,
   closeTimeout = MODAL_CLOSE_TIMEOUT,
-  canBeClosed = true,
   modalContentLabel,
   onAfterClose,
   onAfterOpen,
@@ -62,14 +60,14 @@ function Modal({
       overlayClassName={overlayClassName}
       closeTimeoutMS={closeTimeout}
       bodyOpenClassName={bodyClassName}
-      shouldCloseOnOverlayClick={canBeClosed && shouldCloseOnOverlayClick}
-      shouldCloseOnEsc={canBeClosed && shouldCloseOnEsc}>
+      shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
+      shouldCloseOnEsc={shouldCloseOnEsc}>
       {children}
     </ReactModal>
   );
 
   function handleRequestClose() {
-    if (canBeClosed && onClose) {
+    if (onClose && (shouldCloseOnOverlayClick || shouldCloseOnEsc)) {
       onClose();
     }
   }
