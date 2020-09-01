@@ -16,6 +16,7 @@ export interface FormProps {
   customClassName?: string;
   isSubmitAllowed?: boolean;
   skipErrorTypes?: Array<ArrayToUnion<typeof ERROR_TYPES>>;
+  autoComplete?: string;
 }
 
 function Form(props: FormProps) {
@@ -27,7 +28,8 @@ function Form(props: FormProps) {
     errorInfo,
     knownErrorKeys,
     isSubmitAllowed = true,
-    skipErrorTypes
+    skipErrorTypes,
+    autoComplete = "off"
   } = props;
   const [isPristine, setPristine] = useState(true);
   const containerClassName = classNames("form", customClassName);
@@ -41,7 +43,8 @@ function Form(props: FormProps) {
       className={containerClassName}
       data-testid={testid}
       onChange={handleFormChange}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      autoComplete={autoComplete}>
       {Boolean(formError) && (
         <p data-testid={`${testid}.form-error-message`} className={"form-error-message"}>
           {formError}
