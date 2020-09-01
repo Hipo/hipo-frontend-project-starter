@@ -9,5 +9,13 @@ module.exports = {
 
   // Setup Enzyme
   snapshotSerializers: ["enzyme-to-json/serializer"],
-  setupFilesAfterEnv: ["./src/core/setupEnzyme.ts"]
+  setupFilesAfterEnv: ["./src/core/setupEnzyme.ts"],
+
+  globals: {
+    "ts-jest": {
+      babelConfig: true
+    },
+    BUILD_TYPE: "test",
+    TARGET_ENV_TYPE: "test"
+  }
 };
