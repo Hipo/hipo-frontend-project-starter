@@ -2,7 +2,7 @@ version: 2
 jobs:
   deploy_staging:
     docker:
-      - image: circleci/node:14.9.0
+      - image: circleci/node:12.18.3
     steps:
       - checkout
       - run: npm ci --no-progress --prefer-offline
@@ -12,7 +12,7 @@ jobs:
       #     command: curl -i -X POST 'http://testrunner.hipolabs.com/job/{PROJECT_NAME}/build?token=manufacturit' --user ${TEST_RUNNER_USERNAME}:${TEST_RUNNER_PASSWORD}
   # deploy_production:
   #   docker:
-  #     - image: circleci/node:14.9.0
+  #     - image: circleci/node:12.18.3
   #   steps:
   #     - checkout
   #     - run: npm ci --no-progress --prefer-offline
