@@ -26,7 +26,7 @@ function getTriggerActionCreatorAsPromiseTyped<
   ActionCreators extends AsyncActionCreators<any, any, any>
 >(actionCreators: ActionCreators) {
   return (actionCreators.trigger as unknown) as PromisifiedTriggerActionCreator<
-  ActionCreators
+    ActionCreators
   >;
 }
 
