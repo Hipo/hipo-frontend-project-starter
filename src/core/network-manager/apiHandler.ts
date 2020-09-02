@@ -8,8 +8,7 @@ import {CANCEL} from "redux-saga";
 
 import {NetworkManagerShape} from "./NetworkManager";
 import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../utils/error/errorConstants";
-
-type TRequestMethods = "get" | "post" | "put" | "patch" | "delete";
+import {RequestMethods} from "./networkModels";
 
 export interface ApiHandlerOptions {
   payload?: any;
@@ -23,7 +22,7 @@ export type ApiHandlerCreator<T, ResponseType = any> = (
 
 const apiHandler = <ResponseType = any>(
   apiManager: NetworkManagerShape,
-  method: TRequestMethods,
+  method: RequestMethods,
   url: string,
   options: ApiHandlerOptions = {
     payload: {},
