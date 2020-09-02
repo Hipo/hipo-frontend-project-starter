@@ -117,6 +117,40 @@ const buyerPOListReduxNamespace = {
 
 _Note:_ `promisifyAsyncActionsMiddleware` is added to Redux to promisify `REQUEST_TRIGGER` actions.
 
+_Note:_ For the async processes, avoid using Redux and Redux-saga, if possible. Instead, try using `useAsync` hook. Example usage:
+
+```typescript
+  const requestState = useAsync(
+    {
+      handlerCreator: accountApi.updateAccount,
+      argumentGenerator() {
+        return {
+          accountId: accountDetail!.id,
+          payload: generateUpdateAccountPayload(state)
+        };
+      }
+    },
+    [shouldUpdate, state, accountDetail],
+    {
+      shouldMakeRequest() {
+        return Boolean(shouldUpdate && accountDetail?.id);
+      },
+      onSuccess(account) {
+        setSuccessModalVisibility(true);
+      },
+      onFailure(error) {
+        dispatchFloatingMessage({
+          type: "DISPLAY",
+          payload: {
+            type: "error",
+            message: generateErrorMessageFromCaughtError(error)
+          }
+        });
+      }
+    }
+  );
+```
+
 ### Modals
 
 This template utilizes [react-modal](https://reactcommunity.org/react-modal/) library for implementing modals. There is a component called `Modal` that uses `react-modal` in the background that lets you generate modals easily. An example modal named as `ReportModal` is generated.
