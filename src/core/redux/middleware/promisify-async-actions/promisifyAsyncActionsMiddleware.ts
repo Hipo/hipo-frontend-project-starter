@@ -1,6 +1,7 @@
 import {Dispatch, AnyAction} from "redux";
 
 import {ASYNC_ACTION_PHASE} from "../../reduxConstants";
+import {ReduxAsyncAction} from "../../models/action";
 
 function promisifyAsyncActionsMiddleware() {
   const promiseContextMap = new Map();
@@ -9,8 +10,10 @@ function promisifyAsyncActionsMiddleware() {
     let result;
 
     if (action.isAsync) {
-      if (action.asyncPhase === ASYNC_ACTION_PHASE.TRIGGER) {
-        next(action);
+      const asyncAction = action as ReduxAsyncAction;
+
+      if (asyncAction.asyncPhase === ASYNC_ACTION_PHASE.TRIGGER) {
+        next(asyncAction);
 
         const promiseContext: any = {};
         const promise = new Promise((resolve, reject) => {
@@ -19,22 +22,26 @@ function promisifyAsyncActionsMiddleware() {
         });
 
         promiseContext.promise = promise;
-        promiseContextMap.set(action.typeBase, promiseContext);
+        promiseContext.triggerActionPayload = asyncAction.payload;
+        promiseContextMap.set(asyncAction.typeBase, promiseContext);
         result = promise;
       } else {
-        const promiseContext = promiseContextMap.get(action.typeBase);
+        const promiseContext = promiseContextMap.get(asyncAction.typeBase);
 
         if (promiseContext) {
-          if (action.asyncPhase === ASYNC_ACTION_PHASE.SUCCESS) {
-            promiseContext.resolve(action.payload);
-          } else if (action.asyncPhase === ASYNC_ACTION_PHASE.ERROR) {
-            promiseContext.reject(action.payload);
+          if (asyncAction.asyncPhase === ASYNC_ACTION_PHASE.SUCCESS) {
+            promiseContext.resolve(asyncAction.payload);
+          } else if (asyncAction.asyncPhase === ASYNC_ACTION_PHASE.ERROR) {
+            promiseContext.reject({
+              errorDetail: asyncAction.payload,
+              triggerActionPayload: promiseContext.triggerActionPayload
+            });
           }
 
-          promiseContextMap.delete(action.typeBase);
+          promiseContextMap.delete(asyncAction.typeBase);
         }
 
-        result = next(action);
+        result = next(asyncAction);
       }
     } else {
       result = next(action);

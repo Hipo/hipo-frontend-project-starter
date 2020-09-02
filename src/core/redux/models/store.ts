@@ -5,11 +5,12 @@ interface ReduxStoreShape {
   authenticationState: AuthenticationState;
 }
 
-interface MinimalAsyncStoreState<T = any> {
+interface MinimalAsyncStoreState<Data = any, ApiHandlerArgument = any> {
   isRequestPending: boolean;
   isRequestFetched: boolean;
-  data: T | null;
+  data: Data | null;
   errorInfo: ApiErrorShape | null;
+  requestPayload?: ApiHandlerArgument;
 }
 
 export {ReduxStoreShape, MinimalAsyncStoreState};

@@ -62,9 +62,10 @@ function generateBasicAsyncSaga<ApiHandlerArgumentShape = any>(
       isAsync: true,
       payload: {}
     };
+    const requestPayload = payload;
 
     try {
-      const response = yield call(apiHandler, payload);
+      const response = yield call(apiHandler, requestPayload);
 
       yield put({
         ...putEffectAction,
@@ -76,7 +77,7 @@ function generateBasicAsyncSaga<ApiHandlerArgumentShape = any>(
       yield put({
         ...putEffectAction,
         type: actionTypes.REQUEST_ERROR,
-        payload: error,
+        payload: {errorDetail: error, requestPayload},
         asyncPhase: ASYNC_ACTION_PHASE.ERROR
       });
     } finally {
@@ -122,7 +123,7 @@ function generateTokenAuthSaga<
       yield put({
         ...putEffectAction,
         type: actionTypes.REQUEST_ERROR,
-        payload: error,
+        payload: {errorDetail: error},
         asyncPhase: ASYNC_ACTION_PHASE.ERROR
       });
     } finally {
@@ -178,7 +179,7 @@ function generatePollingSaga<ApiHandlerArgumentShape = any>(
         yield put({
           ...putEffectAction,
           type: actionTypes.REQUEST_ERROR,
-          payload: error,
+          payload: {errorDetail: error},
           asyncPhase: ASYNC_ACTION_PHASE.ERROR
         });
 
