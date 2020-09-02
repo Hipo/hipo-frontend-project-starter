@@ -8,7 +8,7 @@ function generateFinalError(error: any) {
     data: createErrorWithApiErrorShapeFromString("An error occured", "UnknownError"),
     status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
     message: "UnknownError",
-    config: (error && error.config) || {}
+    config: error?.config || {}
   };
 
   let finalError = unknownError;

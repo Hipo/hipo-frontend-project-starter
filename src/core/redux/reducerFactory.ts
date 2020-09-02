@@ -1,17 +1,16 @@
 import {MinimalAsyncStoreState} from "./models/store";
-import {AsyncActionTypes, TReduxActionWithPayload} from "./models/action";
+import {AsyncActionTypes, ReduxActionWithPayload} from "./models/action";
 import {ApiErrorShape} from "../network-manager/networkModels";
 import {createErrorWithApiErrorShapeFromString} from "../../utils/error/errorUtils";
 
 function reduxAsyncReducerFactory<T>(
   initialState: MinimalAsyncStoreState<T>,
   actionTypes: AsyncActionTypes,
-  // @ts-ignore
-  type: "basic"
+  _type: "basic"
 ) {
   return function asyncReducer(
     state = initialState,
-    action: TReduxActionWithPayload
+    action: ReduxActionWithPayload
   ): typeof initialState {
     let newState;
 

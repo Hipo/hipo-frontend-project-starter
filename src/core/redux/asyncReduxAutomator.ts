@@ -1,10 +1,10 @@
-import {TApiHandlerCreator} from "../network-manager/apiHandler";
+import {ApiHandlerCreator} from "../network-manager/apiHandler";
 import {MinimalAsyncStoreState} from "./models/store";
 import {
   AsyncActionTypes,
   AsyncActionCreators,
-  TPromisifiedTriggerActionCreator,
-  TReduxActionWithPayload
+  PromisifiedTriggerActionCreator,
+  ReduxActionWithPayload
 } from "./models/action";
 import {ApiErrorShape} from "../network-manager/networkModels";
 import {sagaWatcherFactory, pollingSagaWatcherFactory} from "./sagaUtils";
@@ -16,80 +16,80 @@ import {
 import {reduxAsyncReducerFactory} from "./reducerFactory";
 import {PollingSagaOptions} from "./models/saga";
 
-function asyncReduxAutomator<TApiHandlerArgument, TData>(
+function asyncReduxAutomator<ApiHandlerArgument, Data>(
   baseActionName: string,
-  apiHandler: TApiHandlerCreator<TApiHandlerArgument>,
-  initialState: MinimalAsyncStoreState<TData>,
+  apiHandler: ApiHandlerCreator<ApiHandlerArgument>,
+  initialState: MinimalAsyncStoreState<Data>,
   type: "basic"
 ): {
-  initialState: MinimalAsyncStoreState<TData>;
+  initialState: MinimalAsyncStoreState<Data>;
   actionTypes: AsyncActionTypes;
   actionCreators: Pick<
-    AsyncActionCreators<TApiHandlerArgument, TData, ApiErrorShape>,
+    AsyncActionCreators<ApiHandlerArgument, Data, ApiErrorShape>,
     "cancel" | "error" | "success" | "cleanup"
   > & {
-    trigger: TPromisifiedTriggerActionCreator<
-      AsyncActionCreators<TApiHandlerArgument, TData, ApiErrorShape>
+    trigger: PromisifiedTriggerActionCreator<
+      AsyncActionCreators<ApiHandlerArgument, Data, ApiErrorShape>
     >;
   };
   saga: ReturnType<typeof sagaWatcherFactory>["saga"];
   watcher: ReturnType<typeof sagaWatcherFactory>["watcher"];
   reducer: (
-    state: MinimalAsyncStoreState<TData> | undefined,
-    action: TReduxActionWithPayload<any>
-  ) => MinimalAsyncStoreState<TData>;
+    state: MinimalAsyncStoreState<Data> | undefined,
+    action: ReduxActionWithPayload<any>
+  ) => MinimalAsyncStoreState<Data>;
 };
 
-function asyncReduxAutomator<TApiHandlerArgument, TData>(
+function asyncReduxAutomator<ApiHandlerArgument, Data>(
   baseActionName: string,
-  apiHandler: TApiHandlerCreator<TApiHandlerArgument>,
-  initialState: MinimalAsyncStoreState<TData>,
+  apiHandler: ApiHandlerCreator<ApiHandlerArgument>,
+  initialState: MinimalAsyncStoreState<Data>,
   type: "poll",
   pollingOptions: PollingSagaOptions
 ): {
-  initialState: MinimalAsyncStoreState<TData>;
+  initialState: MinimalAsyncStoreState<Data>;
   actionTypes: AsyncActionTypes;
   actionCreators: Pick<
     AsyncActionCreators<
-      TApiHandlerArgument & {"@@frontendPollingInterval": number},
-      TData,
+      ApiHandlerArgument & {"@@frontendPollingInterval": number},
+      Data,
       ApiErrorShape
     >,
     "cancel" | "error" | "success" | "cleanup"
   > & {
-    trigger: TPromisifiedTriggerActionCreator<
-      AsyncActionCreators<TApiHandlerArgument, TData, ApiErrorShape>
+    trigger: PromisifiedTriggerActionCreator<
+      AsyncActionCreators<ApiHandlerArgument, Data, ApiErrorShape>
     >;
   };
   saga: ReturnType<typeof pollingSagaWatcherFactory>["saga"];
   watcher: ReturnType<typeof pollingSagaWatcherFactory>["watcher"];
   reducer: (
-    state: MinimalAsyncStoreState<TData> | undefined,
-    action: TReduxActionWithPayload<any>
-  ) => MinimalAsyncStoreState<TData>;
+    state: MinimalAsyncStoreState<Data> | undefined,
+    action: ReduxActionWithPayload<any>
+  ) => MinimalAsyncStoreState<Data>;
 };
 
-function asyncReduxAutomator<TApiHandlerArgument, TData>(
+function asyncReduxAutomator<ApiHandlerArgument, Data>(
   baseActionName: string,
-  apiHandler: TApiHandlerCreator<TApiHandlerArgument>,
+  apiHandler: ApiHandlerCreator<ApiHandlerArgument>,
   initialState: any,
   type: "basic" | "poll",
   pollingOptions?: PollingSagaOptions
 ) {
   const actionTypes = getAsyncActionTypes(baseActionName);
   const actionCreators = generateAsyncActionCreators<
-    TApiHandlerArgument,
-    TData,
+    ApiHandlerArgument,
+    Data,
     ApiErrorShape
   >(actionTypes);
   const sagaAndWatcher =
     type === "poll"
-      ? pollingSagaWatcherFactory<TApiHandlerArgument>(
+      ? pollingSagaWatcherFactory<ApiHandlerArgument>(
           apiHandler,
           actionTypes,
           pollingOptions!
         )
-      : sagaWatcherFactory<TApiHandlerArgument>(apiHandler, actionTypes);
+      : sagaWatcherFactory<ApiHandlerArgument>(apiHandler, actionTypes);
   const reducer = reduxAsyncReducerFactory(initialState, actionTypes, "basic");
 
   return {

@@ -6,6 +6,9 @@ As of Babel 7.4.0, @babel/polyfill package has been deprecated in favor of direc
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
+import "./core/ui/style/reference/_color.scss";
+import "./core/ui/style/reference/_measure.scss";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";

@@ -1,17 +1,21 @@
 import {
   generateInitialAuthenticationState,
-  TAuthenticationState
+  AuthenticationState
 } from "../authenticationState";
-import {TReduxActionWithPayload} from "../../../core/redux/models/action";
+import {ReduxActionWithPayload} from "../../../core/redux/models/action";
 
 function authenticationStateReducer(
   state = generateInitialAuthenticationState(),
-  action: TReduxActionWithPayload
-): TAuthenticationState {
+  action: ReduxActionWithPayload
+): AuthenticationState {
+  const newState = state;
+
   switch (action.type) {
     default:
-      return state;
+      break;
   }
+
+  return newState;
 }
 
-export {authenticationStateReducer};
+export default authenticationStateReducer;

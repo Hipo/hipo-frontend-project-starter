@@ -1,21 +1,19 @@
-@import "../reference/measure";
-
-@mixin border-bottom-radius($radius: $default-border-radius) {
+@mixin border-bottom-radius($radius: var(--default-border-radius)) {
   border-bottom-right-radius: $radius;
   border-bottom-left-radius: $radius;
 }
 
-@mixin border-top-radius($radius: $default-border-radius) {
+@mixin border-top-radius($radius: var(--default-border-radius)) {
   border-top-left-radius: $radius;
   border-top-right-radius: $radius;
 }
 
-@mixin border-left-radius($radius: $default-border-radius) {
+@mixin border-left-radius($radius: var(--default-border-radius)) {
   border-top-left-radius: $radius;
   border-bottom-left-radius: $radius;
 }
 
-@mixin border-right-radius($radius: $default-border-radius) {
+@mixin border-right-radius($radius: var(--default-border-radius)) {
   border-top-right-radius: $radius;
   border-bottom-right-radius: $radius;
 }

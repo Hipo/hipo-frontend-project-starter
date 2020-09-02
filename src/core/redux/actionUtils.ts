@@ -1,7 +1,7 @@
 import {
   AsyncActionTypes,
   AsyncActionCreators,
-  TPromisifiedTriggerActionCreator
+  PromisifiedTriggerActionCreator
 } from "./models/action";
 import {ASYNC_ACTION_PHASE} from "./reduxConstants";
 
@@ -23,10 +23,10 @@ function getAsyncActionTypes(base: string): AsyncActionTypes {
 }
 
 function getTriggerActionCreatorAsPromiseTyped<
-  TActionCreators extends AsyncActionCreators<any, any, any>
->(actionCreators: TActionCreators) {
-  return (actionCreators.trigger as unknown) as TPromisifiedTriggerActionCreator<
-    TActionCreators
+  ActionCreators extends AsyncActionCreators<any, any, any>
+>(actionCreators: ActionCreators) {
+  return (actionCreators.trigger as unknown) as PromisifiedTriggerActionCreator<
+  ActionCreators
   >;
 }
 

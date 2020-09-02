@@ -1,14 +1,14 @@
 import {CallEffect, CancelledEffect, PutEffect} from "redux-saga/effects";
-import {TReduxAsyncAction} from "./action";
+import {ReduxAsyncAction} from "./action";
 
-type TAsyncSaga = IterableIterator<
-  CallEffect | CancelledEffect | PutEffect<Omit<TReduxAsyncAction, "payload">>
+type AsyncSaga = IterableIterator<
+  CallEffect | CancelledEffect | PutEffect<Omit<ReduxAsyncAction, "payload">>
 >;
 
-type TAsyncSagaFactoryFunc = (payload: any) => TAsyncSaga;
+type AsyncSagaFactoryFunction = (payload: any) => AsyncSaga;
 
 interface PollingSagaOptions {
   interval?: number;
 }
 
-export {TAsyncSaga, TAsyncSagaFactoryFunc, PollingSagaOptions};
+export {AsyncSaga, AsyncSagaFactoryFunction, PollingSagaOptions};

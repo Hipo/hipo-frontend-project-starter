@@ -20,9 +20,9 @@ interface ApiListResponse<T = any> {
   results: T[];
 }
 
-type ApiMinimalListRequestQueryParams<TOrderingValues = string> = Partial<{
+type ApiMinimalListRequestQueryParams<OrderingValues = string> = Partial<{
   search: string;
-  ordering: TOrderingValues;
+  ordering: OrderingValues;
   limit: number;
   offset: number;
 }>;

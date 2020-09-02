@@ -16,12 +16,12 @@ export interface ApiHandlerOptions {
   settings?: AxiosRequestConfig;
 }
 
-export type TApiHandlerCreator<T, TResponseType = any> = (
+export type ApiHandlerCreator<T, ResponseType = any> = (
   arg: T,
   cancelToken?: CancelToken
-) => AxiosPromise<TResponseType>;
+) => AxiosPromise<ResponseType>;
 
-const apiHandler = <TResponseType = any>(
+const apiHandler = <ResponseType = any>(
   apiManager: NetworkManagerShape,
   method: TRequestMethods,
   url: string,
@@ -29,7 +29,7 @@ const apiHandler = <TResponseType = any>(
     payload: {},
     settings: {}
   }
-): AxiosPromise<TResponseType> => {
+): AxiosPromise<ResponseType> => {
   const settings = options.settings || {};
   const payload = options.payload || {};
   let source: CancelTokenSource;

@@ -5,7 +5,7 @@ import generateRootReducer from "./reducerUtils";
 import generateRootSaga from "./sagaUtils";
 import {ReduxStoreShape} from "./models/store";
 import {isProduction} from "../../utils/globalVariables";
-import {TReduxActionWithPayload} from "./models/action";
+import {ReduxActionWithPayload} from "./models/action";
 import promisifyAsyncActionsMiddleware from "./middleware/promisify-async-actions/promisifyAsyncActionsMiddleware";
 import {generateInitialAuthenticationState} from "../../authentication/redux/authenticationState";
 
@@ -29,7 +29,7 @@ function createReduxStore(customInitialState: Partial<ReduxStoreShape> = {}) {
 
   const reduxStore = createStore<
     ReduxStoreShape,
-    TReduxActionWithPayload,
+    ReduxActionWithPayload,
     Record<string, unknown>,
     Record<string, unknown>
   >(

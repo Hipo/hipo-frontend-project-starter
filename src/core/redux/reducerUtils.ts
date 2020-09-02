@@ -1,11 +1,11 @@
 import {combineReducers} from "redux";
 
 import {ReduxStoreShape} from "./models/store";
-import {TReduxActionWithPayload} from "./models/action";
-import {authenticationStateReducer} from "../../authentication/redux/reducer/authenticationStateReducer";
+import {ReduxActionWithPayload} from "./models/action";
+import authenticationStateReducer from "../../authentication/redux/reducer/authenticationStateReducer";
 
 function generateRootReducer() {
-  return combineReducers<ReduxStoreShape, TReduxActionWithPayload>({
+  return combineReducers<ReduxStoreShape, ReduxActionWithPayload>({
     authenticationState: authenticationStateReducer
   });
 }

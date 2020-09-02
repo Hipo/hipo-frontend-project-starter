@@ -3,39 +3,39 @@ import {Action} from "redux";
 import {ValueOf} from "../../../utils/typeUtils";
 import {ASYNC_ACTION_PHASE} from "../reduxConstants";
 
-type TReduxActionWithPayload<T = any> = Action<string> & {
+type ReduxActionWithPayload<T = any> = Action<string> & {
   payload: T;
 };
 
-type TReduxAsyncAction<T = any> = TReduxActionWithPayload<T> & {
+type ReduxAsyncAction<T = any> = ReduxActionWithPayload<T> & {
   typeBase: string;
   isAsync: boolean;
   asyncPhase: ValueOf<typeof ASYNC_ACTION_PHASE>;
 };
 
-type TReduxActionCreator<ArgumentType, P = any> = (
+type ReduxActionCreator<ArgumentType, P = any> = (
   x: ArgumentType
-) => TReduxActionWithPayload<P>;
+) => ReduxActionWithPayload<P>;
 
-type TReduxAsyncActionCreator<ArgumentType, P = any> = (
+type ReduxAsyncActionCreator<ArgumentType, P = any> = (
   x: ArgumentType
-) => TReduxAsyncAction<P>;
+) => ReduxAsyncAction<P>;
 
-type TReduxActionCreatorWithoutArgument = () => Action<string>;
+type ReduxActionCreatorWithoutArgument = () => Action<string>;
 
 interface AsyncActionCreators<
   TriggerActionCreatorArgumentType,
   SuccessActionCreatorArgumentType,
   ErrorActionCreatorArgumentType
 > {
-  trigger: TReduxAsyncActionCreator<TriggerActionCreatorArgumentType>;
-  success: TReduxAsyncActionCreator<SuccessActionCreatorArgumentType>;
-  error: TReduxAsyncActionCreator<ErrorActionCreatorArgumentType>;
-  cancel: TReduxActionCreatorWithoutArgument;
-  cleanup: TReduxActionCreatorWithoutArgument;
+  trigger: ReduxAsyncActionCreator<TriggerActionCreatorArgumentType>;
+  success: ReduxAsyncActionCreator<SuccessActionCreatorArgumentType>;
+  error: ReduxAsyncActionCreator<ErrorActionCreatorArgumentType>;
+  cancel: ReduxActionCreatorWithoutArgument;
+  cleanup: ReduxActionCreatorWithoutArgument;
 }
 
-type TPromisifiedTriggerActionCreator<
+type PromisifiedTriggerActionCreator<
   TActionCreators extends AsyncActionCreators<any, any, any>
 > = (
   ...args: Parameters<TActionCreators["trigger"]>
@@ -51,11 +51,11 @@ interface AsyncActionTypes {
 }
 
 export {
-  TReduxAsyncAction,
-  TReduxActionWithPayload,
-  TReduxActionCreator,
+  ReduxAsyncAction,
+  ReduxActionWithPayload,
+  ReduxActionCreator,
   AsyncActionTypes,
   AsyncActionCreators,
-  TReduxActionCreatorWithoutArgument,
-  TPromisifiedTriggerActionCreator
+  ReduxActionCreatorWithoutArgument,
+  PromisifiedTriggerActionCreator
 };

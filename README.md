@@ -105,7 +105,7 @@ These functions would usually be inside a file named as, e.g., `buyerPOApiHandle
 Redux and redux-saga integration is already available with the template. For the asynchronous actions, you can use `asyncReduxAutomator` tool to speed up the generation of necessary action creators, saga watchers, etc. For example, for the buyer PO list request above you can create a `redux` namespace object with:
 
 ```typescript
-const initialBuyerPOListState = getMinimalAsyncListStoreState<IBuyerPO>([]);
+const initialBuyerPOListState = getMinimalAsyncStoreState<IBuyerPO>([]);
 
 const buyerPOListReduxNamespace = {
   initialState: initialBuyerPOListState,
