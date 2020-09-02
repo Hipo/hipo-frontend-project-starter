@@ -1,4 +1,4 @@
-@mixin mn-focus-outline-style($color: var(--blue)) {
+@mixin focus-outline-style($color: var(--blue)) {
   outline: 1px dotted $color;
   outline: -webkit-focus-ring-color auto 5px;
 }
