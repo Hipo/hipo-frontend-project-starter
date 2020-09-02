@@ -1,10 +1,10 @@
 import React, {useState, useRef} from "react";
 import Axios, {CancelTokenSource} from "axios";
 
-import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../error/errorConstants";
-import {generateFinalError} from "../../../core/network-manager/networkUtils";
-import {ApiHandlerCreator} from "../../../core/network-manager/apiHandler";
-import {MinimalAsyncStoreState} from "../../../core/redux/models/store";
+import {MANUALLY_CANCELLED_ERROR_TYPE} from "../error/errorConstants";
+import {generateFinalError} from "../../core/network-manager/networkUtils";
+import {ApiHandlerCreator} from "../../core/network-manager/apiHandler";
+import {MinimalAsyncStoreState} from "../../core/redux/models/store";
 
 interface UseAsyncHookRequestProps<
   ResponseType extends any,
@@ -111,5 +111,35 @@ function useAsync<ResponseType extends any, ApiHandlerArgument extends any>(
 
   return asyncState;
 }
+
+/* USAGE
+
+  const getDetailRequestState = useAsync({
+    handlerCreator: usersApi.getStudent,
+    payload: studentId
+  });
+
+  const updateRequestState = useAsync(
+    {
+      handlerCreator: usersApi.updateStudent,
+      payload: {studentId, payload: {email: emailFromState}}
+    },
+    [shouldUpdateStudent, studentId, emailFromState],
+    {
+      shouldMakeRequest() {
+        return shouldUpdateStudent;
+      },
+      onSuccess(newStudent) {
+        console.log(newStudent);
+        history.push(secondLastBreadcrumbTrailItem.location);
+      },
+      onFailure(error, passedInApiHandlerArgument) {
+        console.log(error.errorDetail, passedInApiHandlerArgument);
+        setShouldUpdateStudentState(false);
+      }
+    }
+  );
+
+*/
 
 export default useAsync;
