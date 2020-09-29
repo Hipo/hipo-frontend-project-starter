@@ -1,13 +1,11 @@
-@import "../core/ui/style/reference/color";
-
 @keyframes animateLogo {
   0%,
   100% {
-    fill: $red;
+    fill: var(--red);
   }
 
   50% {
-    fill: $blue;
+    fill: var(--blue);
   }
 }
 

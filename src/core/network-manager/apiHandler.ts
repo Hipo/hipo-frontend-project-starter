@@ -8,28 +8,27 @@ import {CANCEL} from "redux-saga";
 
 import {NetworkManagerShape} from "./NetworkManager";
 import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../utils/error/errorConstants";
-
-type TRequestMethods = "get" | "post" | "put" | "patch" | "delete";
+import {RequestMethods} from "./networkModels";
 
 export interface ApiHandlerOptions {
   payload?: any;
   settings?: AxiosRequestConfig;
 }
 
-export type TApiHandlerCreator<T, TResponseType = any> = (
+export type ApiHandlerCreator<T, ResponseType = any> = (
   arg: T,
   cancelToken?: CancelToken
-) => AxiosPromise<TResponseType>;
+) => AxiosPromise<ResponseType>;
 
-const apiHandler = <TResponseType = any>(
+const apiHandler = <ResponseType = any>(
   apiManager: NetworkManagerShape,
-  method: TRequestMethods,
+  method: RequestMethods,
   url: string,
   options: ApiHandlerOptions = {
     payload: {},
     settings: {}
   }
-): AxiosPromise<TResponseType> => {
+): AxiosPromise<ResponseType> => {
   const settings = options.settings || {};
   const payload = options.payload || {};
   let source: CancelTokenSource;

@@ -11,7 +11,7 @@ interface ApiErrorShape {
   fallback_message: string;
 }
 
-type TRequestMethods = "get" | "post" | "put" | "patch" | "delete";
+type RequestMethods = "get" | "post" | "put" | "patch" | "delete";
 
 interface ApiListResponse<T = any> {
   count: number;
@@ -20,9 +20,9 @@ interface ApiListResponse<T = any> {
   results: T[];
 }
 
-type ApiMinimalListRequestQueryParams<TOrderingValues = string> = Partial<{
+type ApiMinimalListRequestQueryParams<OrderingValues = string> = Partial<{
   search: string;
-  ordering: TOrderingValues;
+  ordering: OrderingValues;
   limit: number;
   offset: number;
 }>;
@@ -34,7 +34,7 @@ interface ApiRangeModel {
 
 export {
   ApiErrorShape,
-  TRequestMethods,
+  RequestMethods,
   ApiListResponse,
   ApiMinimalListRequestQueryParams,
   ApiRangeModel

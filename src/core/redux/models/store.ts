@@ -1,25 +1,16 @@
 import {ApiErrorShape} from "../../network-manager/networkModels";
-import {TAuthenticationState} from "../../../authentication/redux/authenticationState";
+import {AuthenticationState} from "../../../authentication/redux/authenticationState";
 
 interface ReduxStoreShape {
-  authenticationState: TAuthenticationState;
+  authenticationState: AuthenticationState;
 }
 
-interface MinimalAsyncStoreState<T = any> {
+interface MinimalAsyncStoreState<Data = any, ApiHandlerArgument = any> {
   isRequestPending: boolean;
   isRequestFetched: boolean;
-  data: T | null;
+  data: Data | null;
   errorInfo: ApiErrorShape | null;
+  requestPayload?: ApiHandlerArgument;
 }
 
-type TMinimalListState<T = any> = MinimalAsyncStoreState<T[]> & {
-  count?: number;
-  next?: string;
-  previous?: string;
-};
-
-type TMinimalFormState<T = any> = MinimalAsyncStoreState<T> & {
-  isPristine?: boolean;
-};
-
-export {ReduxStoreShape, MinimalAsyncStoreState, TMinimalListState, TMinimalFormState};
+export {ReduxStoreShape, MinimalAsyncStoreState};

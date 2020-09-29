@@ -11,9 +11,9 @@ import {
 } from "redux-saga/effects";
 import {AxiosPromise} from "axios";
 
-import {TApiHandlerCreator} from "../network-manager/apiHandler";
+import {ApiHandlerCreator} from "../network-manager/apiHandler";
 import {AsyncActionTypes} from "./models/action";
-import {TAsyncSaga, TAsyncSagaFactoryFunc, PollingSagaOptions} from "./models/saga";
+import {AsyncSaga, AsyncSagaFactoryFunction, PollingSagaOptions} from "./models/saga";
 import {ASYNC_ACTION_PHASE} from "./reduxConstants";
 import {POLLING_INTERVAL} from "../network-manager/networkConstants";
 
@@ -26,7 +26,7 @@ function generateRootSaga() {
 }
 
 function sagaWatcherFactory<T>(
-  apiHandler: TApiHandlerCreator<T>,
+  apiHandler: ApiHandlerCreator<T>,
   actionTypes: AsyncActionTypes
 ) {
   const saga = (arg: T) => generateBasicAsyncSaga<T>(apiHandler, actionTypes, arg);
@@ -38,7 +38,7 @@ function sagaWatcherFactory<T>(
 }
 
 function pollingSagaWatcherFactory<T>(
-  apiHandler: TApiHandlerCreator<T>,
+  apiHandler: ApiHandlerCreator<T>,
   actionTypes: AsyncActionTypes,
   pollingOptions: PollingSagaOptions
 ) {
@@ -51,20 +51,21 @@ function pollingSagaWatcherFactory<T>(
   };
 }
 
-function generateBasicAsyncSaga<TApiHandlerArgumentShape = any>(
-  apiHandler: (apiHandlerArgument: TApiHandlerArgumentShape) => AxiosPromise<any>,
+function generateBasicAsyncSaga<ApiHandlerArgumentShape = any>(
+  apiHandler: (apiHandlerArgument: ApiHandlerArgumentShape) => AxiosPromise<any>,
   actionTypes: AsyncActionTypes,
-  payload: TApiHandlerArgumentShape
-): TAsyncSaga {
+  payload: ApiHandlerArgumentShape
+): AsyncSaga {
   return (function* basicSaga() {
     const putEffectAction = {
       typeBase: actionTypes.BASE,
       isAsync: true,
       payload: {}
     };
+    const requestPayload = payload;
 
     try {
-      const response = yield call(apiHandler, payload);
+      const response = yield call(apiHandler, requestPayload);
 
       yield put({
         ...putEffectAction,
@@ -76,7 +77,7 @@ function generateBasicAsyncSaga<TApiHandlerArgumentShape = any>(
       yield put({
         ...putEffectAction,
         type: actionTypes.REQUEST_ERROR,
-        payload: error,
+        payload: {errorDetail: error, requestPayload},
         asyncPhase: ASYNC_ACTION_PHASE.ERROR
       });
     } finally {
@@ -99,7 +100,7 @@ function generateTokenAuthSaga<
   ) => AxiosPromise<any>,
   actionTypes: AsyncActionTypes,
   payload: TriggerActionArgument
-): TAsyncSaga {
+): AsyncSaga {
   return (function* basicSaga() {
     const putEffectAction = {
       typeBase: actionTypes.BASE,
@@ -122,7 +123,7 @@ function generateTokenAuthSaga<
       yield put({
         ...putEffectAction,
         type: actionTypes.REQUEST_ERROR,
-        payload: error,
+        payload: {errorDetail: error},
         asyncPhase: ASYNC_ACTION_PHASE.ERROR
       });
     } finally {
@@ -137,12 +138,12 @@ function generateTokenAuthSaga<
   })();
 }
 
-function generatePollingSaga<TApiHandlerArgumentShape = any>(
-  apiHandler: (apiHandlerArgument: TApiHandlerArgumentShape) => AxiosPromise<any>,
+function generatePollingSaga<ApiHandlerArgumentShape = any>(
+  apiHandler: (apiHandlerArgument: ApiHandlerArgumentShape) => AxiosPromise<any>,
   actionTypes: AsyncActionTypes,
-  payload: TApiHandlerArgumentShape & {"@@frontendPollingInterval"?: number},
+  payload: ApiHandlerArgumentShape & {"@@frontendPollingInterval"?: number},
   options: PollingSagaOptions
-): TAsyncSaga {
+): AsyncSaga {
   let {interval = POLLING_INTERVAL} = options;
   const POLLING_REQUEST_TRIAL_LIMIT = 20;
   const intervalFromPassedPayload = payload && payload["@@frontendPollingInterval"];
@@ -178,7 +179,7 @@ function generatePollingSaga<TApiHandlerArgumentShape = any>(
         yield put({
           ...putEffectAction,
           type: actionTypes.REQUEST_ERROR,
-          payload: error,
+          payload: {errorDetail: error},
           asyncPhase: ASYNC_ACTION_PHASE.ERROR
         });
 
@@ -202,7 +203,7 @@ function generatePollingSaga<TApiHandlerArgumentShape = any>(
 
 function generateDefaultAsyncWatcher(
   actionType: AsyncActionTypes,
-  asyncSaga: TAsyncSagaFactoryFunc
+  asyncSaga: AsyncSagaFactoryFunction
 ) {
   return function* defaultAsyncWatcher() {
     /**
@@ -271,7 +272,7 @@ function generateDefaultAsyncWatcher(
 
 function generatePollingWatcher(
   actionType: AsyncActionTypes,
-  pollingSaga: TAsyncSagaFactoryFunc
+  pollingSaga: AsyncSagaFactoryFunction
 ) {
   return function* () {
     while (true) {

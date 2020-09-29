@@ -1,7 +1,9 @@
-$app-content-width: 1024px;
+:root {
+  --app-content-width: 1024px;
 
-/* border-radius */
-$default-border-radius: 4px;
+  /* border-radius */
+  --default-border-radius: 4px;
 
-/* z-index */
-$mn-page-header-z-index: 2;
+  /* z-index */
+  --page-header-z-index: 2;
+}

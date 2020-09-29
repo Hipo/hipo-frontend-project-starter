@@ -1,6 +1,3 @@
-@import "../../core/ui/style/reference/color";
-@import "../../core/ui/style/reference/measure";
-
 $modal-transition-duration: 0.2s;
 
 .ReactModal__Overlay {
@@ -10,7 +7,7 @@ $modal-transition-duration: 0.2s;
   left: 0;
   right: 0;
 
-  background-color: rgba($charcoal, 0.6);
+  background-color: rgba(var(--charcoal), 0.6);
   opacity: 0;
 
   transition: opacity $modal-transition-duration ease-in-out;
@@ -34,8 +31,8 @@ $modal-transition-duration: 0.2s;
 
   overflow: auto;
 
-  background-color: $bg-color;
-  border-radius: $default-border-radius;
+  background-color: var(--bg-color);
+  border-radius: var(--default-border-radius);
 
   transform: translate(-50%, -50%);
 }

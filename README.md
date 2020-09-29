@@ -14,7 +14,7 @@ This template includes all the configurations for kick-starting a project with R
 
 For now, you need to manually copy-paste all the files from the template into your directory. Eventually, there will be a command-line tool that does this for you. After you copied all the files in this template, you will need to take the following steps:
 
-- This project requires Node >= 10.x and npm >= 6.x for proper development environment.
+- This project requires Node >= 12.x and npm >= 6.x for proper development environment.
 
 1. Update necessary fields inside `package.json` for your projects.
 
@@ -105,7 +105,7 @@ These functions would usually be inside a file named as, e.g., `buyerPOApiHandle
 Redux and redux-saga integration is already available with the template. For the asynchronous actions, you can use `asyncReduxAutomator` tool to speed up the generation of necessary action creators, saga watchers, etc. For example, for the buyer PO list request above you can create a `redux` namespace object with:
 
 ```typescript
-const initialBuyerPOListState = getMinimalAsyncListStoreState<IBuyerPO>([]);
+const initialBuyerPOListState = getMinimalAsyncStoreState<IBuyerPO>([]);
 
 const buyerPOListReduxNamespace = {
   initialState: initialBuyerPOListState,
@@ -116,6 +116,40 @@ const buyerPOListReduxNamespace = {
 `buyerPOListReduxNamespace` will now have `initialState`, `actionTypes`, `actionCreators`, `saga`, `watcher`, `reducer` keys which you can use to integrate into your Redux store.
 
 _Note:_ `promisifyAsyncActionsMiddleware` is added to Redux to promisify `REQUEST_TRIGGER` actions.
+
+_Note:_ For the async processes, avoid using Redux and Redux-saga, if possible. Instead, try using `useAsync` hook. Example usage:
+
+```typescript
+  const requestState = useAsync(
+    {
+      handlerCreator: accountApi.updateAccount,
+      argumentGenerator() {
+        return {
+          accountId: accountDetail!.id,
+          payload: generateUpdateAccountPayload(state)
+        };
+      }
+    },
+    [shouldUpdate, state, accountDetail],
+    {
+      shouldMakeRequest() {
+        return Boolean(shouldUpdate && accountDetail?.id);
+      },
+      onSuccess(account) {
+        setSuccessModalVisibility(true);
+      },
+      onFailure(error) {
+        dispatchFloatingMessage({
+          type: "DISPLAY",
+          payload: {
+            type: "error",
+            message: generateErrorMessageFromCaughtError(error)
+          }
+        });
+      }
+    }
+  );
+```
 
 ### Modals
 

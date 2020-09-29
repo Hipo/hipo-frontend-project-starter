@@ -8,7 +8,7 @@ import {isDevelopmentEnv} from "../../utils/globalVariables";
 import getPublicRouteComponents from "../route/publicRoutes";
 import getProtectedRouteComponents from "../route/protectedRoutes";
 import {getPublicFallbackRoutes} from "../route/fallbackRoutes";
-import RouteLoading from "../../components/RouteLoading";
+import RouteLoading from "../route/component/loading/RouteLoading";
 import ErrorBoundary from "../error/ErrorBoundary";
 
 function RootApp() {

@@ -14,16 +14,16 @@ import {
 import {MANUALLY_CANCELLED_ERROR_TYPE} from "../../utils/error/errorConstants";
 import {AuthenticationToken} from "../../authentication/util/authenticationManager";
 import {stringifySearchParamsObject} from "../../utils/url/urlUtils";
+import ROUTE_NAMES from "../route/util/routeNames";
 
 const BASE_CONFIG: AxiosRequestConfig = {
   baseURL: getNetworkBaseUrl(),
-  paramsSerializer(params) {
-    return params ? stringifySearchParamsObject(params) : "";
-  }
+  paramsSerializer: stringifySearchParamsObject
 };
 
 export interface NetworkManagerShape {
   api: AxiosInstance;
+  latestConfig: AxiosRequestConfig;
   updateToken: (x: AuthenticationToken) => void;
 }
 
@@ -95,9 +95,7 @@ class NetworkManager implements NetworkManagerShape {
           const {status} = finalError;
 
           if (status === HTTP_STATUS_CODES.UNAUTHORIZED) {
-            window.location.href = "/login";
-          } else if (status === HTTP_STATUS_CODES.NOT_FOUND) {
-            console.error(error);
+            window.location.href = ROUTE_NAMES.AUTHENTICATION.LOGIN;
           } else if (status === HTTP_STATUS_CODES.FORBIDDEN) {
             // sendSentryAnException(finalError);
           }

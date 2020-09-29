@@ -1,9 +1,13 @@
 /* stylelint-disable color-no-hex */
-$bg-color: #EFF0F1;
-$charcoal: #39445A;
 
-$red: #ED0E0E;
+:root {
+  --bg-color: #EFF0F1;
+  --charcoal: #39445A;
 
-$blue: #0E4DED;
-$blueberry: #4D7CFE;
+  --blue: #0E4DED;
+  --blueberry: #4D7CFE;
+
+  --red: #ED0E0E;
+}
+
 /* stylelint-enable color-no-hex */

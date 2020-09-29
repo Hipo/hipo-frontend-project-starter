@@ -9,7 +9,7 @@ interface SentryExceptionExtraData {
   data: any;
 }
 
-type TSentryUserInfo = {
+type SentryUserInfo = {
   id: string;
   email: string;
 };
@@ -69,7 +69,7 @@ function showReportDialog(eventId: string) {
   }
 }
 
-function setUserContextForSentry(userInfo: TSentryUserInfo | null) {
+function setUserContextForSentry(userInfo: SentryUserInfo | null) {
   if (!isDevEnv) {
     Sentry.configureScope((scope) => {
       scope.setUser(userInfo);

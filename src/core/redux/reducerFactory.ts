@@ -1,17 +1,16 @@
 import {MinimalAsyncStoreState} from "./models/store";
-import {AsyncActionTypes, TReduxActionWithPayload} from "./models/action";
+import {AsyncActionTypes, ReduxActionWithPayload} from "./models/action";
 import {ApiErrorShape} from "../network-manager/networkModels";
 import {createErrorWithApiErrorShapeFromString} from "../../utils/error/errorUtils";
 
-function reduxAsyncReducerFactory<T>(
-  initialState: MinimalAsyncStoreState<T>,
+function reduxAsyncReducerFactory<Data, ApiHandlerArgument>(
+  initialState: MinimalAsyncStoreState<Data, ApiHandlerArgument>,
   actionTypes: AsyncActionTypes,
-  // @ts-ignore
-  type: "basic"
+  _type: "basic"
 ) {
   return function asyncReducer(
     state = initialState,
-    action: TReduxActionWithPayload
+    action: ReduxActionWithPayload
   ): typeof initialState {
     let newState;
 
@@ -38,22 +37,24 @@ function reduxAsyncReducerFactory<T>(
       }
 
       case actionTypes.REQUEST_ERROR: {
+        const {errorDetail, requestPayload} = action.payload;
         let finalErrorInfo: null | ApiErrorShape = null;
 
-        if (action.payload instanceof Error) {
+        if (errorDetail instanceof Error) {
           finalErrorInfo = createErrorWithApiErrorShapeFromString(
-            action.payload.message,
+            errorDetail.message,
             "ReducerFactory"
           );
-        } else if (action.payload && action.payload.data) {
-          finalErrorInfo = action.payload.data;
+        } else if (errorDetail?.data) {
+          finalErrorInfo = errorDetail.data;
         }
 
         newState = {
           isRequestPending: false,
           isRequestFetched: true,
           data: null,
-          errorInfo: finalErrorInfo
+          errorInfo: finalErrorInfo,
+          requestPayload
         };
 
         break;

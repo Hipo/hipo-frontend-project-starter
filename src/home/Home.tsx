@@ -1,4 +1,4 @@
-import {ReactComponent as Logo} from "../core/ui/icons/HipoLogo.svg";
+import {ReactComponent as HipoLogo} from "../core/ui/icons/hipo-logo.svg";
 
 import "./_home.scss";
 
@@ -16,7 +16,7 @@ function Home(props: HomeProps) {
 
   return (
     <>
-      <Logo width={"220"} height={"110"} className={"hipo-logo"} />
+      <HipoLogo width={"220"} height={"110"} className={"hipo-logo"} />
 
       <div className={"home"}>
         <h1>
