@@ -1,7 +1,5 @@
 const path = require("path");
 
-const COMPLEXITY_LIMIT = 20;
-
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
@@ -58,10 +56,6 @@ module.exports = {
     }
   ],
   rules: {
-    // 👇🏻 Rules for hooks
-    "react-hooks/rules-of-hooks": 2,
-    "react-hooks/exhaustive-deps": 1,
-
     // 👇🏻 `@typescript-eslint` overrides
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-unused-vars": 0,
@@ -73,47 +67,6 @@ module.exports = {
     "@typescript-eslint/no-non-null-assertion": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/ban-ts-comment": 1,
-
-    // 👇🏻 these will be fixed inside `eslint-config-hipo-base`
-    "no-undefined": 0,
-    complexity: ["error", COMPLEXITY_LIMIT],
-    "func-names": 0,
-    "class-methods-use-this": 0,
-    "id-length": 0,
-    "no-use-before-define": ["error", { "functions": false, "classes": true }],
-    "camelcase": 0,
-
-    // 👇🏻 these will be fixed inside `eslint-config-hipo-react`
-    "react/destructuring-assignment": 0,
-    "react/jsx-filename-extension": [
-      1,
-      {
-        extensions: [".jsx", ".tsx"]
-      }
-    ],
-    "react/sort-comp": [
-      2,
-      {
-        order: [
-          "static-methods",
-          "instance-variables",
-          "getters",
-          "setters",
-          "lifecycle",
-          "everything-else",
-          "rendering"
-        ],
-        groups: {
-          rendering: ["render", "/^render.+$/"]
-        }
-      }
-    ],
-    "react/require-optimization": 0,
-    "react/no-multi-comp": ["error", {
-      ignoreStateless: true
-    }],
-    "react/no-did-update-set-state": 0,
-    "react/prop-types": 0,
 
     // tsc already catches these kind of errors
     "no-undef": 0
