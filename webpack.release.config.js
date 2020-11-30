@@ -5,16 +5,21 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const S3Plugin = require("webpack-s3-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
+const SentryWebpackPlugin = require("@sentry/webpack-plugin");
+const GitRevisionPlugin = require("git-revision-webpack-plugin");
 
+const packageJson = require("./package.json");
 const postCssConfig = require("./postcss.config.js");
 const commonConfig = require("./webpack.common.config.js");
 const assetConfig = require("./config/assetConfig.json");
 const s3Config = require("./config/s3Config.json");
+const sentryConfig = require("./config/sentryConfig.json");
+const gitRevisionPlugin = new GitRevisionPlugin();
 
 const BASE_PATH = path.resolve(__dirname, "");
 const DIST_PATH = `${BASE_PATH}/build`;
 
-module.exports = function(env = {target: "local"}) {
+module.exports = function (env = {target: "local"}) {
   const releaseConfig = {
     mode: "production",
 
@@ -122,6 +127,18 @@ module.exports = function(env = {target: "local"}) {
         exclude: /.*\.map/,
         filename: "[path]",
         algorithm: "gzip"
+      }),
+      new SentryWebpackPlugin({
+        // sentry-cli configuration
+        authToken: sentryConfig.authToken,
+        org: sentryConfig.org,
+        project: sentryConfig.projectSlug,
+
+        // webpack specific configuration
+        release: `${packageJson.version}.${gitRevisionPlugin.commithash()}`,
+        include: "./build",
+        urlPrefix: `~/${s3Config[env.target].bucket}/`,
+        ignore: ["node_modules", "*.config.js"]
       }),
       new S3Plugin({
         directory: DIST_PATH,

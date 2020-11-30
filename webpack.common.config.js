@@ -4,13 +4,15 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const GitRevisionPlugin = require("git-revision-webpack-plugin");
 
 const apiConfig = require("./config/apiConfig.json");
 const BASE_PATH = path.resolve(__dirname, "");
 const APP_PATH = `${BASE_PATH}/src`;
 const DIST_PATH = `${BASE_PATH}/build`;
+const gitRevisionPlugin = new GitRevisionPlugin();
 
-module.exports = function(env) {
+module.exports = function (env) {
   const commonConfig = {
     entry: ["react-hot-loader/patch", `${APP_PATH}/index.tsx`],
 
@@ -73,8 +75,8 @@ module.exports = function(env) {
         typescript: {
           diagnosticOptions: {
             semantic: true,
-            syntactic: true,
-          },
+            syntactic: true
+          }
         },
         eslint: {files: "./src/**/*.{ts,tsx,js,jsx}"}
       }),
@@ -88,7 +90,8 @@ module.exports = function(env) {
       }),
       new webpack.DefinePlugin({
         TARGET_ENV_TYPE: JSON.stringify(env.target),
-        API_BASE_URL: JSON.stringify(apiConfig[env.target].BASE_URL)
+        API_BASE_URL: JSON.stringify(apiConfig[env.target].BASE_URL),
+        GIT_COMMIT_HASH: JSON.stringify(gitRevisionPlugin.commithash())
       })
     ]
   };

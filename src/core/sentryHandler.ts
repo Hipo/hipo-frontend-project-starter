@@ -20,7 +20,7 @@ function initSentry() {
   if (!isDevEnv) {
     const config: Sentry.BrowserOptions = {
       dsn: sentryConfig.dsn,
-      release: `${sentryConfig.projectSlug}@${packageJson.version}`,
+      release: `${packageJson.version}.${GIT_COMMIT_HASH}`,
       environment: TARGET_ENV_TYPE,
       attachStacktrace: true,
       integrations: (integrations) => {
