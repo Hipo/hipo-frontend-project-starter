@@ -4,7 +4,6 @@ const {merge} = require("webpack-merge");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const S3Plugin = require("webpack-s3-plugin");
-const CompressionPlugin = require("compression-webpack-plugin");
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 const GitRevisionPlugin = require("git-revision-webpack-plugin");
 
@@ -122,12 +121,6 @@ module.exports = function (env = {target: "local"}) {
           context: __dirname
         }
       }),
-      new CompressionPlugin({
-        test: /\.(js|css)$/,
-        exclude: /.*\.map/,
-        filename: "[path]",
-        algorithm: "gzip"
-      }),
       new SentryWebpackPlugin({
         // sentry-cli configuration
         authToken: sentryConfig.authToken,
@@ -158,15 +151,6 @@ module.exports = function (env = {target: "local"}) {
             }
 
             return disposition;
-          },
-          ContentEncoding(fileName) {
-            let encoding;
-
-            if (/\.css/.test(fileName) || /\.js/.test(fileName)) {
-              encoding = "gzip";
-            }
-
-            return encoding;
           },
           ContentType(fileName) {
             let type;
