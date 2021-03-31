@@ -19,12 +19,13 @@ import authenticationManager from "./authentication/util/authenticationManager";
 import {createReduxStore} from "./core/redux/storeUtils";
 import {ReduxStoreShape} from "./core/redux/models/store";
 import authenticationApi from "./authentication/api/authenticationApi";
+import {generateAuthorizationHeaderValue} from "./core/network-manager/networkUtils";
 
 // initSentry();
 const networkManager = new NetworkManager({
   headers: {
     common: {
-      Authentication: authenticationManager.getToken()
+      Authorization: generateAuthorizationHeaderValue(authenticationManager.getToken())
     }
   }
 });
