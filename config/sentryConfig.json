@@ -1,4 +1,6 @@
 {
-    "dsn": "DSN_CODE",
-    "projectSlug": "PROJECT_SLUG"
-  }
+  "dsn": "DSN_CODE",
+  "projectSlug": "PROJECT_SLUG",
+  "org": "SENTRY_ORGANIZATION_NAME",
+  "authToken": "AUTH_TOKEN"
+}
