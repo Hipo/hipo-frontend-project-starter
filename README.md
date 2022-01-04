@@ -1,4 +1,4 @@
-WARNING: This repo is now archived. It should only be used as a reference if you want to set up a custom webpack configuration. The practices in this repo may be outdated and should be cautious when used as a reference. Hipo uses this new CRA template when starting out new projects.
+# ⚠️ WARNING: This repo is now archived. It should only be used as a reference if you want to set up a custom webpack configuration. The practices in this repo may be outdated and you should be cautious when used as a reference. Hipo uses [this new CRA template](https://github.com/Hipo/cra-template-hipo-typescript) when starting out new projects.
 
 # Hipo Frontend TypeScript Project Template
 
